@@ -1,5 +1,7 @@
 package com.pvc.projectslug;
 
+import com.google.android.gms.maps.MapFragment;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
