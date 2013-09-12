@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,11 +6,25 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".Login" >
+    tools:context=".Login"
+    android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+    <EditText android:id="@+id/type_usr"
+        	android:layout_weight="1"
+        	android:layout_width="0dp"
+        	android:layout_height="wrap_content"
+        	android:hint="@string/type_usr"/>
+    
+    <EditText android:id="@+id/type_pass"
+        	android:layout_weight="1"
+        	android:layout_width="0dp"
+        	android:layout_height="wrap_content"
+        	android:hint="@string/type_pass"
+        	android:inputType="textPassword"/>
+    
+    <Button android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:hint="@string/button_login"
+        	android:onClick="login"/>
 
-</RelativeLayout>
+</Linearayout>

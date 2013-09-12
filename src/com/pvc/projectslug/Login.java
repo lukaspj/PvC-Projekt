@@ -18,5 +18,15 @@ public class Login extends Activity {
 		getMenuInflater().inflate(R.menu.login, menu);
 		return true;
 	}
+	
+	//Called when pressing login button
+	public void login(View view){
+		//TO DO: Make request to server
+		Intent intent = new Intent(this, Welcome.class);
+		EditText usrName = (EditText) findViewById(R.id.type_usr);
+		String welcomeUser = "Welcome " + usrName.getText().toString();
+		intent.putExtra("Extra text", welcomeUser);
+		startActivity(intent);
+	}
 
 }

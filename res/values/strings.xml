@@ -9,5 +9,6 @@
     <string name="choose_usr">Choose Username</string>
     <string name="choose_pass">Choose Password</string>
     <string name="repeat_pass">Repeat Password</string>
+    <string name="button_login">Login</string>
 
 </resources>
