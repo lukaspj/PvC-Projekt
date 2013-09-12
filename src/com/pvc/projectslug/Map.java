@@ -1,9 +1,14 @@
 package com.pvc.projectslug;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,6 +30,7 @@ import android.view.Menu;
 public class Map extends Activity {
 	private GoogleMap gMap;
 	private LocationManager locationManager;
+	private JSONObject json;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,7 +40,12 @@ public class Map extends Activity {
 		gMap.setMyLocationEnabled(true);
 		getActionBar().hide();
 		getLocation();
-//		getServerConnection(Username, pass);
+		try {
+			json = new JSONObject(getJSONString(new URL("")));
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
 
 
 	}
@@ -75,18 +86,36 @@ public class Map extends Activity {
 		locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,locationListner);
 		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListner);
-		//		double latitude = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER).getLatitude();
-		//		double longitude = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER).getLongitude();
-		//		gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 15));
-	}
-	private void getServerConnection(String userName, String pass){
+				/*double latitude = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER).getLatitude();
+				double longitude = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER).getLongitude();
+				gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 15));
+*/	}
+	
+	private String getJSONString(URL url){
+		BufferedReader reader = null;
 		try {
-			URL serverURL = new URL("");
-			HttpURLConnection server = (HttpURLConnection) serverURL.openConnection();
+			HttpURLConnection server = (HttpURLConnection) url.openConnection();
+			reader = new BufferedReader(new InputStreamReader(server.getInputStream()));
+			StringBuilder sb = new StringBuilder();
+			String line;
+			while((line = reader.readLine()) != null){
+				sb.append(line);
+			}
+			return sb.toString();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
+		finally{
+			if(reader != null){
+				try {
+					reader.close();
+				} catch (IOException e2) {
+					e2.printStackTrace();
+				}
+			}
+		}
+		return "";
 	}
 
 	@Override
@@ -96,4 +125,6 @@ public class Map extends Activity {
 		return true;
 	}
 
+
+	
 }
