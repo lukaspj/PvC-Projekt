@@ -4,5 +4,10 @@
     <string name="app_name">Project Slug</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">This is MY world</string>
+    <string name="type_usr">Type Username</string>
+    <string name="type_pass">Type Password</string>
+    <string name="choose_usr">Choose Username</string>
+    <string name="choose_pass">Choose Password</string>
+    <string name="repeat_pass">Repeat Password</string>
 
 </resources>
