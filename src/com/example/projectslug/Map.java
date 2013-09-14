@@ -33,7 +33,7 @@ public class Map extends Activity {
 	private JSONObject json;
 	private LocationManager locationManager;
 	private GoogleMap gMap;
-
+	private Location curLocation;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,50 +49,60 @@ public class Map extends Activity {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	/*Sets the Location manager and centers the map on the last known position of the user.
 	also the place for the locationListner.*/
-	 
-	
+
+
 	private void getLocation(){
 		LocationListener locationListner = new LocationListener() {
-			
+
 			@Override
 			public void onStatusChanged(String provider, int status, Bundle extras) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void onProviderEnabled(String provider) {
 				// TODO Auto-generated method stub
-				
+				locationManager.getProvider(provider);
+
+
 			}
-			
+
 			@Override
 			public void onProviderDisabled(String provider) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void onLocationChanged(Location location) {
 				// TODO Auto-generated method stub
-				
+				if (curLocation == null) {
+					curLocation = location;
+				}else if (curLocation.getLatitude() == location.getLatitude() && curLocation.getLongitude() == location.getLongitude()){
+					return;
+				}
+				gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(getLatLng(curLocation), 15));
 			}
 		}; 
 		locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,locationListner);
 		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListner);
-				double latitude = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER).getLatitude();
-				double longitude = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER).getLongitude();
-				gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 15));
+		Location curLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+		gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(getLatLng(curLocation), 15));
 	}
-	
-	 /** Get the JSON String from the URL and returns empty string otherwise*/
-	
+
+	public LatLng getLatLng(Location l){
+		return new LatLng(l.getLatitude(), l.getLongitude());
+	}
+
+	/** Get the JSON String from the URL and returns empty string otherwise*/
+
 	private String getJSONString(URL url){
 		BufferedReader reader = null;
 		try {
@@ -129,5 +139,5 @@ public class Map extends Activity {
 	}
 
 
-	
+
 }
