@@ -10,5 +10,6 @@
     <string name="choose_pass">Choose Password</string>
     <string name="repeat_pass">Repeat Password</string>
     <string name="button_login">Login</string>
+    <string name="button_regi">Register</string>
 
 </resources>

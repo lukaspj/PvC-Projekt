@@ -1,10 +1,15 @@
 package com.pvc.projectslug;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.EditText;
 
 public class Login extends Activity {
+	
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -22,11 +27,16 @@ public class Login extends Activity {
 	//Called when pressing login button
 	public void login(View view){
 		//TO DO: Make request to server
-		Intent intent = new Intent(this, Welcome.class);
+		//Intent intent = new Intent(this, Map.class);
 		EditText usrName = (EditText) findViewById(R.id.type_usr);
-		String welcomeUser = "Welcome " + usrName.getText().toString();
-		intent.putExtra("Extra text", welcomeUser);
-		startActivity(intent);
+		String username = usrName.getText().toString();
+		//startActivity(intent);
 	}
+	
+	//Called when pressing register button
+	public void register(View view){
+		//send user to register site
+	}
+	
 
 }
