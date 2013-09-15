@@ -9,13 +9,16 @@ import java.net.URL;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Service;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.view.Menu;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -59,6 +62,9 @@ public class Map extends Activity {
 	private void getLocation(){
 		LocationListener locationListner = new LocationListener() {
 
+
+			private boolean updateMap = false;
+
 			@Override
 			public void onStatusChanged(String provider, int status, Bundle extras) {
 				// TODO Auto-generated method stub
@@ -82,19 +88,40 @@ public class Map extends Activity {
 			@Override
 			public void onLocationChanged(Location location) {
 				// TODO Auto-generated method stub
-				if (curLocation == null) {
-					curLocation = location;
-				}else if (curLocation.getLatitude() == location.getLatitude() && curLocation.getLongitude() == location.getLongitude()){
-					return;
+				if (!updateMap) {
+				curLocation = location;
+				gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(getLatLng(curLocation), 13));
+				updateMap = true;
 				}
-				gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(getLatLng(curLocation), 15));
 			}
 		}; 
 		locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,locationListner);
 		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListner);
-		Location curLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-		gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(getLatLng(curLocation), 15));
+		/*Check wether the Gps is enabled and use AlertDialog
+		 * To inform the user and help him go turn it on */
+		if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+		    //Ask the user to enable GPS
+		    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		    builder.setTitle("Location Manager");
+		    builder.setMessage("Would you like to enable GPS?");
+		    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+		        @Override
+		        public void onClick(DialogInterface dialog, int which) {
+		            //Launch settings, allowing user to make a change
+		            Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+		            startActivity(i);
+		        }
+		    });
+		    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+		        @Override
+		        public void onClick(DialogInterface dialog, int which) {
+		            //No location service, no Activity
+		            finish();
+		        }
+		    });
+		    builder.create().show();
+		}
 	}
 
 	public LatLng getLatLng(Location l){
