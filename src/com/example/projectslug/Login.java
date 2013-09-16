@@ -9,6 +9,7 @@ import android.widget.EditText;
 
 public class Login extends Activity {
 	
+	public final static String MESSAGE = "USER_NAME";
 	
 
 	@Override
@@ -30,7 +31,7 @@ public class Login extends Activity {
 		Intent intent = new Intent(this, Map.class);
 		EditText usrName = (EditText) findViewById(R.id.type_usr);
 		String username = usrName.getText().toString();
-		intent.putExtra("Extra Message", username);
+		intent.putExtra(MESSAGE, username);
 		startActivity(intent);
 	}
 	

@@ -34,7 +34,7 @@ public class Map extends Activity implements LocationListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
-		//userName = getIntent().getExtras().getString(Login.USER_NAME);
+		userName = getIntent().getExtras().getString(Login.MESSAGE);
 		MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
 		gMap = mapFragment.getMap();
 		gMap.setMyLocationEnabled(true);
