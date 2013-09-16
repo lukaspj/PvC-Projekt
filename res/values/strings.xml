@@ -13,5 +13,7 @@
     <string name="button_regi">Register</string>
     <string name="title_activity_register">Register</string>
     <string name="not_implemented">This activity is not yet implemented</string>
+    <string name="title_activity_map">Map</string>
+
 
 </resources>
