@@ -30,7 +30,9 @@ public class CloudWorker {
 			BufferedReader br = new BufferedReader(
                                new InputStreamReader(conn.getInputStream()));
  
+			// The Cloud API will always return a single line result
 			String inputLine = br.readLine();
+			// Interpret the result
 			if(inputLine.contains("-1"))
 				cb.IsUserRecieved(CloudCallback.IsUserResult.MultipleRegistered);
 			else if(inputLine.contains("1"))
