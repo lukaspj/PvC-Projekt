@@ -5,7 +5,7 @@ class App_model extends CI_Model {
 		$CI =& get_instance();
 		$query = $CI->db->query("SELECT * FROM app_users WHERE username='$username'");
 		if($query->num_rows() > 1)
-			return - 1;
+			return -1;
 		else
 			return $query->num_rows() == 0 ? true : false;
 	}

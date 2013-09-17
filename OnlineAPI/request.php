@@ -64,6 +64,14 @@ class request extends CI_Controller {
 			case "is_username_available":
 				echo resp_app_user_exists($this, $data);
 			break;
+			case "is_bob_available":
+			$this->load->model('app_model');
+			echo $this->app_model->usernameavailable("Bob") ? "1" : "0";
+			break;
+			case "is_ann_available":
+			$this->load->model('app_model');
+			echo $this->app_model->usernameavailable("Ann") ? "1" : "0";
+			break;
 		}
 	}
 }

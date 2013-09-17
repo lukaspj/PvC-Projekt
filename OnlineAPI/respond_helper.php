@@ -205,7 +205,7 @@ if(!function_exists('resp_app_user_exists'))
 	{
 		$obj->load->model('app_model');
 		$user = $obj->input->post('username');
-		return $obj->app_model->userexists($user);
+		return $obj->app_model->usernameavailable($user) ? "1" : "0";
 	}
 }
 
