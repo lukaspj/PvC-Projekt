@@ -17,6 +17,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.pvc.projectslug.CloudInterface;
 
 /**
  * @author baljenurface
@@ -95,10 +96,7 @@ public class Map extends Activity implements LocationListener{
 			gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(getLatLng(curLocation), 13));
 			updateMap = false;
 		}
-/*		
- * if((boolean)usernameExists(userName)){
-			updatePosition(userName, location.getLatitude(), location.getLongitude());
-		}*/
+			//CloudInterface.updatePosition(userName, location.getLatitude(), location.getLongitude());
 	}
 
 	@Override
