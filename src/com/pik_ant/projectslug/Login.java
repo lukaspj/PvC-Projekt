@@ -1,4 +1,6 @@
-package com.example.projectslug;
+package com.pik_ant.projectslug;
+
+import com.pik_ant.projectslug.R;
 
 import android.app.Activity;
 import android.content.Intent;
