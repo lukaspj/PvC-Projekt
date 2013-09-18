@@ -18,4 +18,19 @@ public class CloudInterface {
 		Thread t = new Thread(worker);
 		t.start();
 	}
+	
+	public static void getUsers(CloudCallback cb) {
+		final CloudCallback _cb = cb;
+		
+		Runnable worker = new Runnable() {
+			
+			@Override
+			public void run() {
+				CloudWorker.GetUserWork(_cb);
+			}
+		};
+		
+		Thread t = new Thread(worker);
+		t.start();
+	}
 }
