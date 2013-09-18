@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.projectslug"
+    package="com.pik_ant.projectslug"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -31,7 +31,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.example.projectslug.Login"
+            android:name="com.pik_ant.projectslug.Login"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,23 +40,23 @@
             </intent-filter>
         </activity>
 
-        <meta-data
+        <!--<meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyD3uSepdFa_BgoJS6LEs6VI8hSCW0SbCdA" />
+            android:value="AIzaSyD3uSepdFa_BgoJS6LEs6VI8hSCW0SbCdA" />-->
 
         <activity
-            android:name="com.example.projectslug.Register"
+            android:name="com.pik_ant.projectslug.Register"
             android:label="@string/title_activity_register" >
         </activity>
 
         <activity
-            android:name="com.example.projectslug.Map"
+            android:name="com.pik_ant.projectslug.Map"
             android:label="@string/title_activity_map" >
         </activity>
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBLd_Xukqmjh5J67tc6F1OuOQrixm9tzmQ" />
+            android:value="AIzaSyBf_Yyd0iuvN75AxjkWgClYNBqapGVFuYM" />
 
     </application>
 
