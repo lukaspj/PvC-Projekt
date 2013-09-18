@@ -1,4 +1,4 @@
-package com.pvc.projectslug;
+package com.pik_ant.projectslug;
 
 import java.io.BufferedReader;
 import java.io.IOException;

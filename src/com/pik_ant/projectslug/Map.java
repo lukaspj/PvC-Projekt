@@ -1,6 +1,4 @@
-package com.example.projectslug;
-
-import org.json.JSONObject;
+package com.pik_ant.projectslug;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -17,7 +15,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.pvc.projectslug.CloudInterface;
+import com.pik_ant.projectslug.R;
 
 /**
  * @author baljenurface

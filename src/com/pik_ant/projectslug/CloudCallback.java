@@ -1,4 +1,4 @@
-package com.pvc.projectslug;
+package com.pik_ant.projectslug;
 public class CloudCallback {
 	// Enum for possible returned results
 	enum IsUserResult {
