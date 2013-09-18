@@ -27,11 +27,18 @@ public class Login extends Activity {
 	
 	//Called when pressing login button
 	public void login(View view){
-		//TO DO: Make request to server
 		Intent intent = new Intent(this, Map.class);
+		
+		//Get username and password as strings
 		EditText usrName = (EditText) findViewById(R.id.type_usr);
-		String username = usrName.getText().toString();
-		intent.putExtra(MESSAGE, username);
+		EditText usrPass = (EditText) findViewById(R.id.type_pass);
+		String userName = usrName.getText().toString();
+		String userPass = usrPass.getText().toString();
+		
+		//Make request to server here
+		
+		
+		intent.putExtra(MESSAGE, userName);
 		startActivity(intent);
 	}
 	
