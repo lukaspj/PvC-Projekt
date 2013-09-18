@@ -2,40 +2,103 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".Register" 
-    android:orientation="vertical">
+    tools:context=".Register" >
 
-    <EditText 
-        	android:id="@+id/choose_usr"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:hint="@string/choose_usr"
-        	android:layout_gravity="center"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/choose_usr"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:hint="@string/choose_usr" />
+
+            <EditText
+                android:id="@+id/choose_pass"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:hint="@string/choose_pass"
+                android:inputType="textPassword" />
+
+            <EditText
+                android:id="@+id/repeat_pass"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:hint="@string/repeat_pass"
+                android:inputType="textPassword" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/usr_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/check_usr"
+                android:src="@drawable/raemi_check_mark"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/pass_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/check_pass"
+                android:src="@drawable/raemi_check_mark"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/reap_pass_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/check_pass"
+                android:src="@drawable/raemi_check_mark"
+                android:visibility="invisible" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:onClick="register"
+        android:text="@string/button_regi" />
     
-    <EditText 
-        	android:id="@+id/choose_pass"
+    <ProgressBar
+        	android:id="@+id/load_anim"
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
-        	android:hint="@string/choose_pass"
-        	android:layout_gravity="center"
-        	android:inputType="textPassword"/>
+        	style="@android:style/Widget.ProgressBar.Small"
+			android:layout_gravity="center"
+			android:visibility="invisible"/>
     
-    <EditText 
-        	android:id="@+id/repeat_pass"
+    <TextView
+        	android:id="@+id/load_text"
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
-        	android:hint="@string/repeat_pass"
+        	android:text="@string/loading"
         	android:layout_gravity="center"
-        	android:inputType="textPassword"/>
-    <Button 
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:text="@string/button_regi"
-        	android:layout_gravity="center"
-        	android:onClick="register"/>
+        	android:visibility="invisible"/>
 
 </LinearLayout>
