@@ -209,6 +209,23 @@ if(!function_exists('resp_app_user_exists'))
 	}
 }
 
+if(!function_exists('resp_all_app_users'))
+{
+	function resp_all_app_users($obj, $data)
+	{
+		$obj->load->model('app_model');
+		$table = $obj->app_model->allAppUsers();
+		foreach($table->result() as $row)
+		{
+			echo $row->username . "|";
+			echo $row->x . "|";
+			echo $row->y . "|";
+			echo $row->bluetoothid;
+			echo "\n";
+		}
+	}
+}
+
 if(!function_exists('resp_app_update_position'))
 {
 	function resp_app_update_position($obj, $data)
