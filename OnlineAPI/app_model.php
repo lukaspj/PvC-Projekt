@@ -11,18 +11,25 @@ class App_model extends CI_Model {
 		else
 			return true;
 	}
+	
+	public function allAppUsers()
+	{
+		$CI =& get_instance();
+		return $CI->db->query("SELECT username, X(position) AS x, Y(position) AS y, bluetoothid FROM app_users");
+	}
+	
 	//http://howto-use-mysql-spatial-ext.blogspot.dk/
 	public function updatePosition($username, $lat, $long)
 	{
 		$CI =& get_instance();
 		if($this->usernameavailable($username))
 		{
-			$query = $CI->db->query("UPDATE app_users SET position=GeomFromText('POINT($lat $long)') WHERE username='$username'");
+			$query = $CI->db->query("INSERT INTO app_users (username, position) VALUES ('$username', GeomFromText('POINT($lat $long)'))");
 			return $CI->db->_error_number();
 		}
 		else
 		{
-			$query = $CI->db->query("INSERT INTO app_users (username, position) VALUES ('$username', GeomFromText('POINT($lat $long)'))");
+			$query = $CI->db->query("UPDATE app_users SET position=GeomFromText('POINT($lat $long)') WHERE username='$username'");
 			return $CI->db->_error_number();
 		}
 	}

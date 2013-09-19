@@ -23,7 +23,8 @@
         	android:inputType="textPassword"
         	android:layout_gravity="center" />
     
-    <Button android:layout_width="wrap_content"
+    <Button android:id="@+id/btn_login"
+        	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
         	android:text="@string/button_login"
         	android:onClick="login"
@@ -34,5 +35,21 @@
         	android:text="@string/button_regi"
         	android:onClick="register" 
         	android:layout_gravity="right"/>
+    
+    <ProgressBar
+        	android:id="@+id/load_anim"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	style="@android:style/Widget.ProgressBar.Small"
+			android:layout_gravity="center"
+			android:visibility="invisible"/>
+    
+    <TextView
+        	android:id="@+id/load_text"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:text="@string/loading"
+        	android:layout_gravity="center"
+        	android:visibility="invisible"/>
 
 </LinearLayout>
