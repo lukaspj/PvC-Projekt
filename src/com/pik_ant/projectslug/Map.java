@@ -1,90 +1,39 @@
 package com.pik_ant.projectslug;
 
-import java.util.List;
-
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.provider.Settings;
 import android.view.Menu;
 
-import com.google.android.gms.internal.dw;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.MarkerOptionsCreator;
 import com.pik_ant.projectslug.R;
 
 /**
  * @author baljenurface
  *
  */
-public class Map extends Activity implements LocationListener{
+public class Map extends Activity{
 	//private GoogleMap gMap;
 
 	private LocationManager locationManager;
 	private GoogleMap gMap;
-	private Location curLocation;
-	private boolean updateMap = true;
 	private String userName;
+	private MapModifier modifier;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
+		getActionBar().hide();
 		userName = getIntent().getExtras().getString(Login.MESSAGE);
 		MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
 		gMap = mapFragment.getMap();
 		gMap.setMyLocationEnabled(true);
-		getActionBar().hide();
-		getLocation();
-		getLocationMarkers();
-
-	}
-
-	/*Sets the Location manager and centers the map on the last known position of the user.
-	also the place for the locationListner.*/
-
-
-	private void getLocation(){
 		locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10,this);
-		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 10, this);
-		/*Check weather the GPS is enabled and use AlertDialog
-		 * To inform the user and help him go turn it on */
-		if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-			//Ask the user to enable GPS
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle("Location Manager");
-			builder.setMessage("Would you like to enable GPS?");
-			builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					//Launch settings, allowing user to make a change
-					Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-					startActivity(i);
-				}
-			});
-			builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					//What to do when no LocationProvider enabled?
-				}
-			});
-			builder.create().show();
-		}
-	}
-
-	public LatLng getLatLng(Location l){
-		return new LatLng(l.getLatitude(), l.getLongitude());
+		modifier = new MapModifier(gMap, locationManager, this);
+		modifier.getLocation();
+		modifier.getLocationMarkers();
 	}
 
 	@Override
@@ -93,50 +42,4 @@ public class Map extends Activity implements LocationListener{
 		getMenuInflater().inflate(R.menu.map, menu);
 		return true;
 	}
-
-	@Override
-	public void onLocationChanged(Location location) {
-		// TODO Auto-generated method stub
-		if (updateMap) {
-			curLocation = location;
-			gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(getLatLng(curLocation), 13));
-			updateMap = false;
-		}
-		//CloudInterface.updatePosition(userName, location.getLatitude(), location.getLongitude());
-	}
-
-	@Override
-	public void onProviderDisabled(String provider) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void getLocationMarkers(){
-		final GoogleMap map = gMap;
-		CloudInterface.getUsers(new CloudCallback(){
-			public void GetUsersRecieved(List<User> lis){
-				for(User u : lis){
-					if(!(curLocation.getLatitude()==u.lat && curLocation.getLongitude()==u.lng)){
-						map.addMarker(new MarkerOptions()
-						.position(new LatLng(u.lat, u.lng))
-						.title(u.Username));	
-					}
-				}
-			}
-		});
-		
-	}
-
 }

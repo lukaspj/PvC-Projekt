@@ -52,7 +52,7 @@ public class Login extends Activity {
 		//GET TO IT LUKAS!!!
 		
 		intent.putExtra(MESSAGE, userName);
-		//startActivity(intent);
+		startActivity(intent);
 	}
 	
 	//Called when pressing register button
