@@ -46,7 +46,7 @@ public class Map extends Activity implements LocationListener{
 		gMap.setMyLocationEnabled(true);
 		getActionBar().hide();
 		getLocation();
-		//getLocationMarkers();
+		getLocationMarkers();
 
 	}
 
@@ -125,12 +125,14 @@ public class Map extends Activity implements LocationListener{
 
 	public void getLocationMarkers(){
 		final GoogleMap map = gMap;
-		CloudInterface.get_users(new CloudCallback(){
-			public void getUsersRecieved(List<User> lis){
+		CloudInterface.getUsers(new CloudCallback(){
+			public void GetUsersRecieved(List<User> lis){
 				for(User u : lis){
-					map.addMarker(new MarkerOptions()
-					.position(new LatLng(u.lat, u.lng))
-					.title(u.userName));
+					if(!(curLocation.getLatitude()==u.lat && curLocation.getLongitude()==u.lng)){
+						map.addMarker(new MarkerOptions()
+						.position(new LatLng(u.lat, u.lng))
+						.title(u.Username));	
+					}
 				}
 			}
 		});
