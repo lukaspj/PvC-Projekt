@@ -1,5 +1,7 @@
 package com.pik_ant.projectslug;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -8,13 +10,18 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.provider.Settings;
 import android.view.Menu;
 
+import com.google.android.gms.internal.dw;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.MarkerOptionsCreator;
 import com.pik_ant.projectslug.R;
 
 /**
@@ -39,6 +46,7 @@ public class Map extends Activity implements LocationListener{
 		gMap.setMyLocationEnabled(true);
 		getActionBar().hide();
 		getLocation();
+		//getLocationMarkers();
 
 	}
 
@@ -85,7 +93,7 @@ public class Map extends Activity implements LocationListener{
 		getMenuInflater().inflate(R.menu.map, menu);
 		return true;
 	}
-	
+
 	@Override
 	public void onLocationChanged(Location location) {
 		// TODO Auto-generated method stub
@@ -94,7 +102,7 @@ public class Map extends Activity implements LocationListener{
 			gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(getLatLng(curLocation), 13));
 			updateMap = false;
 		}
-			//CloudInterface.updatePosition(userName, location.getLatitude(), location.getLongitude());
+		//CloudInterface.updatePosition(userName, location.getLatitude(), location.getLongitude());
 	}
 
 	@Override
@@ -114,4 +122,19 @@ public class Map extends Activity implements LocationListener{
 		// TODO Auto-generated method stub
 
 	}
+
+	public void getLocationMarkers(){
+		final GoogleMap map = gMap;
+		CloudInterface.get_users(new CloudCallback(){
+			public void getUsersRecieved(List<User> lis){
+				for(User u : lis){
+					map.addMarker(new MarkerOptions()
+					.position(new LatLng(u.lat, u.lng))
+					.title(u.userName));
+				}
+			}
+		});
+		
+	}
+
 }
