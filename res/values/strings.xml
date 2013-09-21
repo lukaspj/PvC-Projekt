@@ -21,8 +21,5 @@
     <string name="last_pass_default"></string>
     <string name="last_user">last_usr</string>
     <string name="last_pass">last_pass</string>
-    <string name="saved_high_score_default"></string>
-    <string name="saved_high_score"></string>
-
 
 </resources>

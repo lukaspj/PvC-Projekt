@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 public class Login extends Activity {
 	
-	public final static String MESSAGE = "USER_NAME";
 	private SharedPreferences sharedPref;
 	private EditText inputUser;
 	private EditText inputPass;
@@ -31,7 +30,8 @@ public class Login extends Activity {
 		String lastPassDef = getResources().getString(R.string.last_pass_default);
 		String lastUsr = sharedPref.getString(getString(R.string.last_user), lastUsrDef);
 		String lastPass = sharedPref.getString(getString(R.string.last_pass), lastPassDef);
-				
+		
+		//Setting the last user as default for login
 		inputUser = (EditText) findViewById(R.id.type_usr);
 		inputPass = (EditText) findViewById(R.id.type_pass);
 		
@@ -71,8 +71,6 @@ public class Login extends Activity {
 		editor.putString(getString(R.string.last_pass), userPass);
 		editor.commit();
 		
-		
-		//intent.putExtra(MESSAGE, userName);
 		startActivity(intent);
 	}
 	

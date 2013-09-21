@@ -28,12 +28,13 @@ public class Map extends Activity implements LocationListener{
 	private GoogleMap gMap;
 	private Location curLocation;
 	private boolean updateMap = true;
-	private String userName;
+	//Use a shared preference with key last_user instead
+	//private String userName;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
-		userName = getIntent().getExtras().getString(Login.MESSAGE);
+		//userName = getIntent().getExtras().getString(Login.MESSAGE);
 		MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
 		gMap = mapFragment.getMap();
 		gMap.setMyLocationEnabled(true);
