@@ -1,7 +1,9 @@
 package com.pik_ant.projectslug;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -13,12 +15,30 @@ import android.widget.TextView;
 public class Login extends Activity {
 	
 	public final static String MESSAGE = "USER_NAME";
-	
+	private SharedPreferences sharedPref;
+	private EditText inputUser;
+	private EditText inputPass;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+		
+		//Getting the values for the last used user and pass.
+		//Default user and pass are empty strings.
+		sharedPref = getPreferences(Context.MODE_PRIVATE);		
+		String lastUsrDef = getResources().getString(R.string.last_user_default);
+		String lastPassDef = getResources().getString(R.string.last_pass_default);
+		String lastUsr = sharedPref.getString(getString(R.string.last_user), lastUsrDef);
+		String lastPass = sharedPref.getString(getString(R.string.last_pass), lastPassDef);
+				
+		inputUser = (EditText) findViewById(R.id.type_usr);
+		inputPass = (EditText) findViewById(R.id.type_pass);
+		
+		if(!lastUsr.isEmpty()){
+			inputUser.setText(lastUsr);
+			inputPass.setText(lastPass);
+		}
 	}
 
 	@Override
@@ -32,7 +52,7 @@ public class Login extends Activity {
 	public void login(View view){
 		Intent intent = new Intent(this, Map.class);
 		
-		//Disble login button, so that the server doesn't get flooded with requests
+		//Disable login button, so that the server doesn't get flooded with requests
 		Button login_btn = (Button) findViewById(R.id.btn_login);
 		login_btn.setClickable(false);
 		
@@ -43,16 +63,17 @@ public class Login extends Activity {
 		loading_text.setVisibility(0);
 		
 		//Get username and password as strings
-		EditText usrName = (EditText) findViewById(R.id.type_usr);
-		EditText usrPass = (EditText) findViewById(R.id.type_pass);
-		String userName = usrName.getText().toString();
-		String userPass = usrPass.getText().toString();
+		String userName = inputUser.getText().toString();
+		String userPass = inputPass.getText().toString();
 		
-		//Request server for login
-		//GET TO IT LUKAS!!!
+		SharedPreferences.Editor editor = sharedPref.edit();
+		editor.putString(getString(R.string.last_user), userName);
+		editor.putString(getString(R.string.last_pass), userPass);
+		editor.commit();
 		
-		intent.putExtra(MESSAGE, userName);
-		//startActivity(intent);
+		
+		//intent.putExtra(MESSAGE, userName);
+		startActivity(intent);
 	}
 	
 	//Called when pressing register button
