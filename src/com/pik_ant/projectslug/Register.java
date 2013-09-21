@@ -1,6 +1,8 @@
 package com.pik_ant.projectslug;
 
+import android.R.bool;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -18,6 +20,8 @@ public class Register extends Activity {
 	private EditText usrName;
 	private EditText usrPass_1;
 	private EditText usrPass_2;
+	private boolean userAvailability;
+	private boolean userChecked;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +37,7 @@ public class Register extends Activity {
 		usrPass_2.setOnEditorActionListener(new OnEditorActionListener() {		
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-				
+
 				String pass_1 = usrPass_1.getText().toString();
 				String pass_2 = usrPass_2.getText().toString();
 				ImageView passCheck = (ImageView) findViewById(R.id.reap_pass_check);
@@ -46,7 +50,6 @@ public class Register extends Activity {
 					passCheck.setImageDrawable(resourses.getDrawable(R.drawable.checkerror));
 					passCheck.setVisibility(0);
 				}
-
 				return false;
 			}
 		});
@@ -70,33 +73,48 @@ public class Register extends Activity {
 		//Get user name view
 		usrName = (EditText) findViewById(R.id.choose_usr);
 		String userName = usrName.getText().toString();
-		
 
 		CloudInterface.is_username_available(userName, new CloudCallback(){
 
 			@Override
 			public void IsUserRecieved(IsUserResult res){
-				ImageView usrCheck = (ImageView) findViewById(R.id.usr_check);
-		
-				if(IsUserResult.Registered != null){
-					usrCheck.setImageDrawable(resourses.getDrawable(R.drawable.checkerror));
-					usrCheck.setVisibility(0);
+
+				final String result = res.toString();
+
+				if(result.equals("NotRegistered")){
+					userAvailable();
 				}
-				else if(IsUserResult.NotRegistered != null){
-					usrCheck.setImageDrawable(resourses.getDrawable(R.drawable.raemi_check_mark));
-					usrCheck.setVisibility(0);
-				}
-				else {
-					usrCheck.setImageDrawable(resourses.getDrawable(R.drawable.checkerror));
-					usrCheck.setVisibility(0);
-				}
+				checkedUserAvailability();
+
 			}
 
 		});
+		
+		ImageView usrCheck = (ImageView) findViewById(R.id.usr_check);
+		
+		while(!userChecked){
+			//... wait until result comes in... 
+			//wanna play cards or something?
+			//this is a stupid hack...
+		}
+		
+		if(userAvailability){
+			usrCheck.setImageDrawable(resourses.getDrawable(R.drawable.raemi_check_mark));
+			usrCheck.setVisibility(0);
+		}
+		else{
+			usrCheck.setImageDrawable(resourses.getDrawable(R.drawable.checkerror));
+			usrCheck.setVisibility(0);
+		}
 
+	}
 
-			
+	public void userAvailable(){
+		userAvailability = true;
+	}
 
+	public void checkedUserAvailability(){
+		userChecked = true;
 	}
 
 }

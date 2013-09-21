@@ -24,16 +24,17 @@
                 android:id="@+id/choose_usr"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_weight="1"
                 android:layout_gravity="center"
-                android:hint="@string/choose_usr" />
+                android:layout_weight="1"
+                android:hint="@string/choose_usr"
+                android:inputType="textPersonName" />
 
             <EditText
                 android:id="@+id/choose_pass"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_weight="1"
                 android:layout_gravity="center"
+                android:layout_weight="1"
                 android:hint="@string/choose_pass"
                 android:inputType="textPassword" />
 
@@ -41,8 +42,8 @@
                 android:id="@+id/repeat_pass"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_weight="1"
                 android:layout_gravity="center"
+                android:layout_weight="1"
                 android:hint="@string/repeat_pass"
                 android:inputType="textPassword" />
         </LinearLayout>
@@ -84,21 +85,28 @@
         android:layout_gravity="center"
         android:onClick="register"
         android:text="@string/button_regi" />
-    
+
     <ProgressBar
-        	android:id="@+id/load_anim"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	style="@android:style/Widget.ProgressBar.Small"
-			android:layout_gravity="center"
-			android:visibility="invisible"/>
-    
+        android:id="@+id/load_anim"
+        style="@android:style/Widget.ProgressBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="invisible" />
+
     <TextView
-        	android:id="@+id/load_text"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:text="@string/loading"
-        	android:layout_gravity="center"
-        	android:visibility="invisible"/>
+        android:id="@+id/load_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/loading"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/errorMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+        	
 
 </LinearLayout>
