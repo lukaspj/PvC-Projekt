@@ -15,6 +15,7 @@ import android.widget.TextView.OnEditorActionListener;
 public class Register extends Activity {
 
 	private Resources resourses;
+	private EditText usrName;
 	private EditText usrPass_1;
 	private EditText usrPass_2;
 
@@ -24,7 +25,7 @@ public class Register extends Activity {
 		setContentView(R.layout.activity_register);
 		resourses = getResources();
 
-		//Get chosen password as strings
+		//Get password views
 		usrPass_1 = (EditText) findViewById(R.id.choose_pass);
 		usrPass_2 = (EditText) findViewById(R.id.repeat_pass);
 
@@ -32,7 +33,7 @@ public class Register extends Activity {
 		usrPass_2.setOnEditorActionListener(new OnEditorActionListener() {		
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-
+				
 				String pass_1 = usrPass_1.getText().toString();
 				String pass_2 = usrPass_2.getText().toString();
 				ImageView passCheck = (ImageView) findViewById(R.id.reap_pass_check);
@@ -65,11 +66,36 @@ public class Register extends Activity {
 		TextView loading_text = (TextView) findViewById(R.id.load_text);
 		loading_animation.setVisibility(0);
 		loading_text.setVisibility(0);
-		
-		//Get chosen username as string
-		EditText usrName = (EditText) findViewById(R.id.choose_usr);
-		String userName = usrName.getText().toString();
 
+		//Get user name view
+		usrName = (EditText) findViewById(R.id.choose_usr);
+		String userName = usrName.getText().toString();
+		
+
+		CloudInterface.is_username_available(userName, new CloudCallback(){
+
+			@Override
+			public void IsUserRecieved(IsUserResult res){
+				ImageView usrCheck = (ImageView) findViewById(R.id.usr_check);
+		
+				if(IsUserResult.Registered != null){
+					usrCheck.setImageDrawable(resourses.getDrawable(R.drawable.checkerror));
+					usrCheck.setVisibility(0);
+				}
+				else if(IsUserResult.NotRegistered != null){
+					usrCheck.setImageDrawable(resourses.getDrawable(R.drawable.raemi_check_mark));
+					usrCheck.setVisibility(0);
+				}
+				else {
+					usrCheck.setImageDrawable(resourses.getDrawable(R.drawable.checkerror));
+					usrCheck.setVisibility(0);
+				}
+			}
+
+		});
+
+
+			
 
 	}
 

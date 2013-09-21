@@ -66,6 +66,7 @@ public class Login extends Activity {
 		String userName = inputUser.getText().toString();
 		String userPass = inputPass.getText().toString();
 		
+		//Still needs to send login request to server
 		SharedPreferences.Editor editor = sharedPref.edit();
 		editor.putString(getString(R.string.last_user), userName);
 		editor.putString(getString(R.string.last_pass), userPass);
