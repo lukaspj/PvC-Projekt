@@ -29,7 +29,7 @@ public class Register extends Activity {
 		usrPass_1 = (EditText) findViewById(R.id.choose_pass);
 		usrPass_2 = (EditText) findViewById(R.id.repeat_pass);
 
-		//Add a action listener to the repeat password, to check if the two passwords are equal
+		//Add an action listener to the 'repeat password', to check if the two passwords are equal
 		usrPass_2.setOnEditorActionListener(new OnEditorActionListener() {		
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -70,32 +70,46 @@ public class Register extends Activity {
 		usrName = (EditText) findViewById(R.id.choose_usr);
 		String userName = usrName.getText().toString();
 
-
+		//Check for user name availability
 		CloudInterface.is_username_available(userName, new CloudCallback(){
+
 			ImageView usrCheck = (ImageView) findViewById(R.id.usr_check);
 			
-			Runnable usernameChecker = new Runnable() {
+			//Runnable for available
+			Runnable setCheck = new Runnable(){
 				@Override
 				public void run(){
-					if(IsUserResult.NotRegistered != null){
-						usrCheck.setImageDrawable(resourses.getDrawable(R.drawable.raemi_check_mark));
-						usrCheck.setVisibility(0);
-					}
-					else{
-						usrCheck.setImageDrawable(resourses.getDrawable(R.drawable.checkerror));
-						usrCheck.setVisibility(0);
-					}
-					
+					usrCheck.setImageDrawable(resourses.getDrawable(R.drawable.raemi_check_mark));
+					usrCheck.setVisibility(0);
 				}
 			};
-			
+
+			//Runnable for not available
+			Runnable setError = new Runnable(){
+				@Override
+				public void run(){
+					usrCheck.setImageDrawable(resourses.getDrawable(R.drawable.checkerror));
+					usrCheck.setVisibility(0);
+				}
+			};	
+
 			@Override
 			public void IsUserRecieved(IsUserResult res){
-				runOnUiThread(usernameChecker);
+				String result = res.toString();
+				
+				if(result.equals("Registered")){
+					runOnUiThread(setError);
+				}
+				else if(result.equals("NotRegistered")){
+					runOnUiThread(setCheck);
+				}
+				else{
+					runOnUiThread(setError);
+				}
 			}
-					
+
 		});
-		
+
 	}
 
 }
