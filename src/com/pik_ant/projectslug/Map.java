@@ -18,14 +18,12 @@ public class Map extends Activity{
 
 	private LocationManager locationManager;
 	private GoogleMap gMap;
-	private String userName;
 	private MapModifier modifier;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
 		getActionBar().hide();
-		userName = getIntent().getExtras().getString(Login.MESSAGE);
 		MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
 		gMap = mapFragment.getMap();
 		gMap.setMyLocationEnabled(true);
@@ -41,4 +39,14 @@ public class Map extends Activity{
 		getMenuInflater().inflate(R.menu.map, menu);
 		return true;
 	}
+	
+	@Override
+	protected void onResume(){
+		super.onResume();
+		modifier.updateMarkers();
+	}
+	
+	
+	
+	
 }

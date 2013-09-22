@@ -1,5 +1,6 @@
 package com.pik_ant.projectslug;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -36,7 +37,7 @@ public class MapModifier implements LocationListener{
 	private Context context;
 	private static Marker marker;
 	private Handler handler = new Handler(Looper.getMainLooper());
-	private static boolean hasTarget = false;
+	private final ArrayList<Marker> markers = new ArrayList<Marker>();
 
 	public MapModifier(GoogleMap map, LocationManager manager, Context context, final FragmentManager fManager){
 		this.gMap = map;
@@ -48,7 +49,7 @@ public class MapModifier implements LocationListener{
 			public boolean onMarkerClick(Marker _marker) {
 				// TODO Auto-generated method stub
 				marker = _marker;
-				TargetDialogFragment target= new TargetDialogFragment();
+				TargetDialogFragment target = new TargetDialogFragment();
 				target.show(fManager, "target dialog");
 				return false;
 			}
@@ -72,9 +73,9 @@ public class MapModifier implements LocationListener{
 								@Override
 								public void run() {
 									// TODO Auto-generated method stub
-									map.addMarker(new MarkerOptions()
+									markers.add(map.addMarker(new MarkerOptions()
 									.position(new LatLng(u2.lat, u2.lng))
-									.title(u2.Username));
+									.title(u2.Username)));
 								}
 							});
 
@@ -84,6 +85,35 @@ public class MapModifier implements LocationListener{
 			}
 		});
 
+	}
+	public void updateMarkers(){
+		final GoogleMap map = gMap;
+		CloudInterface.getUsers(new CloudCallback(){
+			public void GetUsersRecieved(List<User> lis){
+				ArrayList<Marker> _markers = markers;
+				if(!lis.isEmpty()){
+					for(int i = 0; i<lis.size(); i++){
+						final User u = lis.get(i);
+						if(!markers.isEmpty()){
+							markers.get(i).setPosition(new LatLng(u.lat, u.lng));
+							_markers.remove(i);
+						}
+						else{
+							handler.post(new Runnable() {
+
+								@Override
+								public void run() {
+									// TODO Auto-generated method stub
+									markers.add(map.addMarker(new MarkerOptions()
+									.position(new LatLng(u.lat, u.lng))
+									.title(u.Username)));
+								}
+							});
+						}
+					}
+				}
+			}
+		});
 	}
 	/*Sets the Location manager and centers the map on the last known position of the user.
 	also the place for the locationListner.*/
@@ -115,19 +145,20 @@ public class MapModifier implements LocationListener{
 		}
 	}
 	public static class TargetDialogFragment extends DialogFragment {
-
+		private static boolean target = false;
 		@Override
 		public Dialog onCreateDialog(Bundle b){
+			final boolean hasTarget = target;
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			builder.setMessage("Want to set" + marker.getTitle() + "as target?");
+			builder.setMessage("Want to set " + marker.getTitle() + " as target?");
 			builder.setPositiveButton("yes", new OnClickListener() {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
-					if(!hasTarget ){
+					if(!hasTarget){
 						marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.slug_launcher));
-						hasTarget = true;
+						target = true;
 					}
 					else{
 						Toast.makeText(getActivity(), "you all ready have a target",Toast.LENGTH_SHORT).show();
@@ -144,10 +175,16 @@ public class MapModifier implements LocationListener{
 			return builder.create();
 			
 		}
+		
+		public static void hasTarget(boolean b){
+			 target = b;
+		}
 	}
+	
 	public void hasTarget(boolean b){
-		hasTarget = b;
+		TargetDialogFragment.hasTarget(b);
 	}
+
 
 	@Override
 	public void onLocationChanged(Location location) {
