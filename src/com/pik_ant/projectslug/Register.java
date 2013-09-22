@@ -2,6 +2,7 @@ package com.pik_ant.projectslug;
 
 import android.app.Activity;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -25,9 +26,9 @@ public class Register extends Activity {
 		setContentView(R.layout.activity_register);
 		resourses = getResources();
 
-		//Get password views
+		//Get password and views
 		usrPass_1 = (EditText) findViewById(R.id.choose_pass);
-		usrPass_2 = (EditText) findViewById(R.id.repeat_pass);
+		usrPass_2 = (EditText) findViewById(R.id.repeat_pass);		
 
 		//Add an action listener to the 'repeat password', to check if the two passwords are equal
 		usrPass_2.setOnEditorActionListener(new OnEditorActionListener() {		
@@ -37,14 +38,21 @@ public class Register extends Activity {
 				String pass_1 = usrPass_1.getText().toString();
 				String pass_2 = usrPass_2.getText().toString();
 				ImageView passCheck = (ImageView) findViewById(R.id.reap_pass_check);
+				TextView errorMess = (TextView) findViewById(R.id.errorMessage);
 
 				if(pass_1.equals(pass_2)){
+					errorMess.setText("");
+					errorMess.setVisibility(1);
 					passCheck.setImageDrawable(resourses.getDrawable(R.drawable.raemi_check_mark));
 					passCheck.setVisibility(0);
 				}
 				else {
 					passCheck.setImageDrawable(resourses.getDrawable(R.drawable.checkerror));
 					passCheck.setVisibility(0);
+					errorMess.setText(R.string.error_pass_nomatch);
+					errorMess.setTextColor(Color.RED);
+					errorMess.setVisibility(0);
+					
 				}
 				return false;
 			}
@@ -74,6 +82,7 @@ public class Register extends Activity {
 		CloudInterface.is_username_available(userName, new CloudCallback(){
 
 			ImageView usrCheck = (ImageView) findViewById(R.id.usr_check);
+			TextView errorMess = (TextView) findViewById(R.id.errorMessage);
 			
 			//Runnable for available
 			Runnable setCheck = new Runnable(){
@@ -81,6 +90,7 @@ public class Register extends Activity {
 				public void run(){
 					usrCheck.setImageDrawable(resourses.getDrawable(R.drawable.raemi_check_mark));
 					usrCheck.setVisibility(0);
+					errorMess.setVisibility(1);
 				}
 			};
 
@@ -90,6 +100,9 @@ public class Register extends Activity {
 				public void run(){
 					usrCheck.setImageDrawable(resourses.getDrawable(R.drawable.checkerror));
 					usrCheck.setVisibility(0);
+					errorMess.setText(R.string.error_username_taken);
+					errorMess.setTextColor(Color.RED);
+					errorMess.setVisibility(0);
 				}
 			};	
 
