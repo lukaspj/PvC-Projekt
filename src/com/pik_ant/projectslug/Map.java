@@ -1,7 +1,6 @@
 package com.pik_ant.projectslug;
 
 import android.app.Activity;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
@@ -31,7 +30,7 @@ public class Map extends Activity{
 		gMap = mapFragment.getMap();
 		gMap.setMyLocationEnabled(true);
 		locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-		modifier = new MapModifier(gMap, locationManager, this);
+		modifier = new MapModifier(gMap, locationManager, this, getFragmentManager());
 		modifier.getLocation();
 		modifier.getLocationMarkers();
 	}
