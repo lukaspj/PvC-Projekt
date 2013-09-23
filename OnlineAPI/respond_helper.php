@@ -238,4 +238,65 @@ if(!function_exists('resp_app_update_position'))
 	}
 }
 
+/**********************************/
+/************* JONAS **************/
+/**********************************/
+if(!function_exists('jon_app_user_exists'))
+{
+	function jon_app_user_exists($obj, $data)
+	{
+		$obj->load->model('app_model');
+		$deviceid = $obj->input->post('deviceid');
+		return $obj->app_model->jon_userexists($deviceid);
+	}
+}
+
+if(!function_exists('jon_app_update_position'))
+{
+	function jon_app_update_position($obj, $data)
+	{
+		$obj->load->model('app_model');
+		$deviceid = $obj->input->post('deviceid');
+		$lat = $obj->input->post('lat');
+		$long = $obj->input->post('long');
+		return $obj->app_model->jon_updatePosition($deviceid, $lat, $long);
+	}
+}
+
+if(!function_exists('jon_app_initiate_user'))
+{
+	function jon_app_initiate_user($obj, $data)
+	{
+		$obj->load->model('app_model');
+		$deviceid = $obj->input->post('deviceid');
+		$name = $obj->input->post('name');
+		return $obj->app_model->jon_initiateUser($deviceid, $name);
+	}
+}
+
+if(!function_exists('jon_app_get_other_users'))
+{
+	function jon_app_get_other_users($obj, $data)
+	{
+		$obj->load->model('app_model');
+		$mydeviceid = $obj->input->post('mydeviceid');
+		$result = $obj->app_model->jon_initiateUser($mydeviceid);
+		
+		$alluserarray = array();
+		$count = 0;
+		
+		foreach($result.result() as $row){
+			$singleuserarray[0] = $row->name;
+			$singleuserarray[1] = $row->x;
+			$singleuserarray[2] = $row->y;
+			$singleuserarray[3] = $row->time;
+			
+			$alluserarray[$count] = $singleuserarray;	
+			$count = $count+1;
+		}
+		
+		return json_encode($alluserarray);
+	}
+}
+
 /** END OF FILE **/

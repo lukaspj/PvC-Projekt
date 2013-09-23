@@ -79,6 +79,19 @@ class request extends CI_Controller {
 				$this->load->model('app_model');
 				$this->app_model->updatePosition("Bob", 1.13, 4.15);
 			break;
+			// Jonas APP API ---
+			case "jon_user_exists":
+				echo jon_app_user_exists($this, $data);
+			break;
+			case "jon_update_position":
+				echo jon_app_update_position($this, $data);
+			break;
+			case "jon_initiate_user":
+				echo jon_app_initiate_user($this, $data);
+			break;
+			case "jon_get_other_users":
+				echo jon_app_get_other_users($this, $data);
+			break;
 		}
 	}
 }

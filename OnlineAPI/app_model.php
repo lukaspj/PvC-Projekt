@@ -65,5 +65,50 @@ class App_model extends CI_Model {
 		else
 			return FALSE;
 	}
+	
+	/**********************************/
+	/************* JONAS **************/
+	/**********************************/
+	public function jon_userexists($deviceid)
+	{
+		$CI =& get_instance();
+		$query = $CI->db->query("SELECT * FROM jon_users WHERE deviceid='$deviceid'");
+		if($query->num_rows() > 1)
+			return - 1;
+		else
+			return $query->num_rows() == 0 ? true : false;
+	}
+	
+	//http://howto-use-mysql-spatial-ext.blogspot.dk/
+	public function jon_updatePosition($devicid, $lat, $long)
+	{
+		$CI =& get_instance();
+		$time = time();
+		
+		$query = $CI->db->query("UPDATE jon_users SET position=GeomFromText('POINT($lat $long)'), time='$time' WHERE deviceid='$deviceid'");
+		return $CI->db->_error_number();
+	}
+	
+	public function jon_initiateUser($deviceid, $name)
+	{
+		$CI =& get_instance();
+		if($this->jon_userexists($deviceid))
+		{
+			$query = $CI->db->query("UPDATE jon_users SET name='$name' WHERE deviceid='$deviceid'");
+			return $CI->db->_error_number();
+		}
+		else
+		{
+			$query = $CI->db->query("INSERT INTO jon_users (deviceid, name) VALUES ('$deviceid', '$name')");
+			return $CI->db->_error_number();
+		}
+	}
+	
+	public function jon_getOtherUsers($mydeviceid)
+	{
+		$CI =& get_instance();
+		$query = $CI->db->query("SELECT name, X(position) x, Y(position) y, time FROM jon_users WHERE deviceid != '$mydeviceid'");
+		return $query;
+	}
 }
 /* END OF FILE */
