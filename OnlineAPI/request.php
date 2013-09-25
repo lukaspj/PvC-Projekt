@@ -70,6 +70,9 @@ class request extends CI_Controller {
 			case "all_app_users":
 				echo resp_all_app_users($this, $data);
 			break;
+			case "radius_search":
+				echo resp_app_user_radius_search($this, $data);
+			break;
 			case "is_username_available":
 				echo resp_app_user_available($this, $data);
 			break;

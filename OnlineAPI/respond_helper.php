@@ -251,6 +251,27 @@ if(!function_exists('resp_all_app_users'))
 	}
 }
 
+if(!function_exists('resp_app_user_radius_search'))
+{
+	function resp_app_user_radius_search($obj, $data)
+	{
+		$obj->load->model('app_model');
+		$user = $obj->input->post('username');
+		$lat = $obj->input->post('lat');
+		$long = $obj->input->post('long');
+		$radius = $obj->input->post('radius');
+		$table = $obj->app_model->getUsersInsideCircle($user, $lat, $long, $radius);
+		foreach($table->result() as $row)
+		{
+			echo $row->username . "|";
+			echo $row->x . "|";
+			echo $row->y . "|";
+			echo $row->bluetoothid;
+			echo "\n";
+		}
+	}
+}
+
 if(!function_exists('resp_app_update_position'))
 {
 	function resp_app_update_position($obj, $data)
