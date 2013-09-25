@@ -7,7 +7,6 @@ import android.view.Menu;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.pik_ant.projectslug.R;
 
 /**
  * @author baljenurface
@@ -46,7 +45,7 @@ public class Map extends Activity{
 	@Override
 	protected void onResume(){
 		super.onResume();
-		modifier.updateMarkers();
+		//modifier.updateMarkers();
 	}
 	
 	

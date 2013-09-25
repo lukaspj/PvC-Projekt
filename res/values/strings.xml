@@ -23,5 +23,7 @@
     <string name="last_pass">last_pass</string>
     <string name="error_pass_nomatch">The passwords doesn\'t match</string>
     <string name="error_username_taken">The username is not available</string>
+    <string name="confirm_target">Want to set %s as target?</string>
+    <string name="error_target_exists">You already have a target!</string>
 
 </resources>
