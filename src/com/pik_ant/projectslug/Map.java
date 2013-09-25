@@ -18,8 +18,6 @@ public class Map extends Activity{
 
 	private LocationManager locationManager;
 	private GoogleMap gMap;
-	private Location curLocation;
-	private boolean updateMap = true;
 	//Use a shared preference with key last_user instead
 	private MapModifier modifier;
 	@Override
