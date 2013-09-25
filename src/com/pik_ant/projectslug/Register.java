@@ -41,8 +41,7 @@ public class Register extends Activity {
 				TextView errorMess = (TextView) findViewById(R.id.errorMessage);
 
 				if(pass_1.equals(pass_2)){
-					errorMess.setText("");
-					errorMess.setVisibility(1);
+					errorMess.setVisibility(4);
 					passCheck.setImageDrawable(resourses.getDrawable(R.drawable.raemi_check_mark));
 					passCheck.setVisibility(0);
 				}
@@ -74,9 +73,14 @@ public class Register extends Activity {
 		loading_animation.setVisibility(0);
 		loading_text.setVisibility(0);
 
-		//Get user name view
+		//Get user name and password
 		usrName = (EditText) findViewById(R.id.choose_usr);
+		usrPass_1 = (EditText) findViewById(R.id.choose_pass);
 		String userName = usrName.getText().toString();
+		String userPass = usrPass_1.getText().toString();
+		final User user = new User();
+		user.Username = userName;
+		user.setPassword(userPass);
 
 		//Check for user name availability
 		CloudInterface.is_username_available(userName, new CloudCallback(){
@@ -90,7 +94,8 @@ public class Register extends Activity {
 				public void run(){
 					usrCheck.setImageDrawable(resourses.getDrawable(R.drawable.raemi_check_mark));
 					usrCheck.setVisibility(0);
-					errorMess.setVisibility(1);
+					errorMess.setVisibility(4);
+					CloudInterface.registerUser(new CloudCallback(){}, user);
 				}
 			};
 
@@ -108,12 +113,11 @@ public class Register extends Activity {
 
 			@Override
 			public void IsUserRecieved(IsUserResult res){
-				String result = res.toString();
 				
-				if(result.equals("Registered")){
+				if(res == IsUserResult.Registered){
 					runOnUiThread(setError);
 				}
-				else if(result.equals("NotRegistered")){
+				else if(res == IsUserResult.NotRegistered){
 					runOnUiThread(setCheck);
 				}
 				else{
