@@ -247,7 +247,7 @@ if(!function_exists('jon_app_user_exists'))
 	{
 		$obj->load->model('app_model');
 		$deviceid = $obj->input->post('deviceid');
-		return $obj->app_model->jon_userexists($deviceid);
+		return $obj->app_model->jon_userexists($deviceid) ? "1" : "0";
 	}
 }
 
@@ -280,12 +280,12 @@ if(!function_exists('jon_app_get_other_users'))
 	{
 		$obj->load->model('app_model');
 		$mydeviceid = $obj->input->post('mydeviceid');
-		$result = $obj->app_model->jon_initiateUser($mydeviceid);
+		$result = $obj->app_model->jon_getOtherUsers($mydeviceid);
 		
 		$alluserarray = array();
 		$count = 0;
 		
-		foreach($result.result() as $row){
+		foreach($result->result() as $row){
 			$singleuserarray[0] = $row->name;
 			$singleuserarray[1] = $row->x;
 			$singleuserarray[2] = $row->y;

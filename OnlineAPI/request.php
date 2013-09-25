@@ -92,6 +92,10 @@ class request extends CI_Controller {
 			case "jon_get_other_users":
 				echo jon_app_get_other_users($this, $data);
 			break;
+			case "tulstrup_exists":
+				$this->load->model('app_model');
+				echo $this->app_model->jon_userexists("3E4D09D928B20B15") ? "1" : "0";
+			break;
 		}
 	}
 }

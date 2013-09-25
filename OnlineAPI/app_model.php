@@ -76,11 +76,11 @@ class App_model extends CI_Model {
 		if($query->num_rows() > 1)
 			return - 1;
 		else
-			return $query->num_rows() == 0 ? true : false;
+			return $query->num_rows() == 1 ? true : false;
 	}
 	
 	//http://howto-use-mysql-spatial-ext.blogspot.dk/
-	public function jon_updatePosition($devicid, $lat, $long)
+	public function jon_updatePosition($deviceid, $lat, $long)
 	{
 		$CI =& get_instance();
 		$time = time();
