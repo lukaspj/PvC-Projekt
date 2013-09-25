@@ -192,4 +192,47 @@ public class CloudWorker {
 		// Else
 		cb.IsUserRecieved(CloudCallback.IsUserResult.Registered);
 	}
+	
+	public static void UserRadiusSearchWork(CloudCallback cb, User usr, double radius) {
+		URL url;
+		ArrayList<User> retUsers = new ArrayList<User>();
+		try{
+			// get URL content
+			url = new URL("http://fuzzyvoidstudio.com/request/get/radius_search/");
+			URLConnection conn = url.openConnection();
+			conn.setDoOutput(true);
+			
+			OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
+			
+			// Send our POST data
+			writer.write("username="+usr.Username+"&lat="+usr.lat+"&long="+usr.lng+"&radius="+radius);
+			writer.flush();
+ 
+			// open the stream and put it into BufferedReader
+			BufferedReader br = new BufferedReader(
+                               new InputStreamReader(conn.getInputStream()));
+			String line;
+			while((line = br.readLine()) != null)
+			{
+				line = line.replace('|', '_');
+				String[] fields = line.split("_");
+				if(fields.length != 4)
+					continue;
+				User _usr = new User();
+				_usr.Username = fields[0];
+				_usr.lng = Double.parseDouble(fields[1]);
+				_usr.lat = Double.parseDouble(fields[2]);
+				_usr.BluetoothID = Integer.parseInt(fields[3]);
+				retUsers.add(usr);
+			}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// Else
+		cb.RadiusSearchRecieved(retUsers);
+	}
 }

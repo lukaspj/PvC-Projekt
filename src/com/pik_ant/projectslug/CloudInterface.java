@@ -81,4 +81,21 @@ public class CloudInterface {
 		Thread t = new Thread(worker);
 		t.start();
 	}
+	
+	public static void radiusSearch(CloudCallback cb, User usr, double radius) {
+		final CloudCallback _cb = cb;
+		final User _usr = usr;
+		final double _radius = radius;
+		
+		Runnable worker = new Runnable() {
+			
+			@Override
+			public void run() {
+				CloudWorker.UserRadiusSearchWork(_cb, _usr, _radius);
+			}
+		};
+		
+		Thread t = new Thread(worker);
+		t.start();
+	}
 }
