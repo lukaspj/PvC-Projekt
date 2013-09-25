@@ -208,6 +208,18 @@ if(!function_exists('resp_app_user_available'))
 		return $obj->app_model->usernameavailable($user) ? "1" : "0";
 	}
 }
+
+if(!function_exists('resp_app_verify_user'))
+{
+	function resp_app_verify_user($obj, $data)
+	{
+		$obj->load->model('app_model');
+		$user = $obj->input->post('username');
+		$pass = $obj->input->post('pass');
+		return $obj->app_model->verify_user($user, $pass) ? "1" : "0";
+	}
+}
+
 if(!function_exists('resp_app_user_register'))
 {
 	function resp_app_user_register($obj, $data)

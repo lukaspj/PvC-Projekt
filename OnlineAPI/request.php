@@ -64,6 +64,9 @@ class request extends CI_Controller {
 			case "update_position":
 				echo resp_app_update_position($this, $data);
 			break;
+			case "verify_user":
+				echo resp_app_verify_user($this, $data);
+			break;
 			case "all_app_users":
 				echo resp_all_app_users($this, $data);
 			break;
