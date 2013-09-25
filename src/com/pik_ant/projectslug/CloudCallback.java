@@ -20,4 +20,7 @@ public class CloudCallback {
 	public void RegisterUserRecieved(int errornum) {};
 
 	public void VerifyUserRecieved(IsUserResult res) {};
+
+	// Callback for getting all users
+	public void RadiusSearchRecieved(List<User> lis) {};
 }
