@@ -33,4 +33,52 @@ public class CloudInterface {
 		Thread t = new Thread(worker);
 		t.start();
 	}
+	
+	public static void updatePosition(CloudCallback cb, User usr) {
+		final CloudCallback _cb = cb;
+		final User _usr = usr;
+		
+		Runnable worker = new Runnable() {
+			
+			@Override
+			public void run() {
+				CloudWorker.UpdatePositionWork(_cb, _usr);
+			}
+		};
+		
+		Thread t = new Thread(worker);
+		t.start();
+	}
+	
+	public static void registerUser(CloudCallback cb, User usr) {
+		final CloudCallback _cb = cb;
+		final User _usr = usr;
+		
+		Runnable worker = new Runnable() {
+			
+			@Override
+			public void run() {
+				CloudWorker.RegisterUserWork(_cb, _usr);
+			}
+		};
+		
+		Thread t = new Thread(worker);
+		t.start();
+	}
+	
+	public static void verifyUser(CloudCallback cb, User usr) {
+		final CloudCallback _cb = cb;
+		final User _usr = usr;
+		
+		Runnable worker = new Runnable() {
+			
+			@Override
+			public void run() {
+				CloudWorker.VerifyUserWork(_cb, _usr);
+			}
+		};
+		
+		Thread t = new Thread(worker);
+		t.start();
+	}
 }

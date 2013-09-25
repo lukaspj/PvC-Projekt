@@ -87,4 +87,109 @@ public class CloudWorker {
 		// Else
 		cb.GetUsersRecieved(retUsers);
 	}
+	
+	public static void UpdatePositionWork(CloudCallback cb, User usr) {
+		URL url;
+		try{
+			// get URL content
+			url = new URL("http://fuzzyvoidstudio.com/request/get/update_position/");
+			URLConnection conn = url.openConnection();
+			conn.setDoOutput(true);
+			
+			OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
+			
+			// Send our POST data
+			writer.write("username="+usr.Username+"&lat="+usr.lat+"&long="+usr.lng);
+			writer.flush();
+ 
+			// open the stream and put it into BufferedReader
+			BufferedReader br = new BufferedReader(
+                               new InputStreamReader(conn.getInputStream()));
+			String line = br.readLine();
+			line = line.trim();
+			int errornum = Integer.parseInt(line);
+			cb.UpdatePositionRecieved(errornum);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// Else
+		cb.UpdatePositionRecieved(-1);
+	}
+	
+	public static void RegisterUserWork(CloudCallback cb, User usr) {
+		URL url;
+		try{
+			// get URL content
+			url = new URL("http://fuzzyvoidstudio.com/request/get/register_user/");
+			URLConnection conn = url.openConnection();
+			conn.setDoOutput(true);
+			
+			OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
+			
+			// Send our POST data
+			writer.write("username="+usr.Username+"&lat="+usr.lat+"&long="+usr.lng+"&id="+usr.BluetoothID+"&password="+usr.getEncPassword().toString());
+			writer.flush();
+ 
+			// open the stream and put it into BufferedReader
+			BufferedReader br = new BufferedReader(
+                               new InputStreamReader(conn.getInputStream()));
+			String line = br.readLine();
+			line = line.trim();
+			int errornum = Integer.parseInt(line);
+			cb.RegisterUserRecieved(errornum);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// Else
+		cb.RegisterUserRecieved(-1);
+	}
+
+	public static void VerifyUserWork(CloudCallback cb, User usr)
+	{
+		URL url;
+		try{
+			// get URL content
+			url = new URL("http://fuzzyvoidstudio.com/request/get/verify_user/");
+			URLConnection conn = url.openConnection();
+			conn.setDoOutput(true);
+			
+			OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
+			
+			// Send our POST data
+			writer.write("username="+usr.Username+"&pass="+usr.getEncPassword());
+			writer.flush();
+			
+ 
+			// open the stream and put it into BufferedReader
+			BufferedReader br = new BufferedReader(
+                               new InputStreamReader(conn.getInputStream()));
+ 
+			// The Cloud API will always return a single line result
+			String inputLine = br.readLine();
+			// Interpret the result
+			if(inputLine.contains("-1"))
+				cb.IsUserRecieved(CloudCallback.IsUserResult.MultipleRegistered);
+			else if(inputLine.contains("1"))
+				cb.IsUserRecieved(CloudCallback.IsUserResult.NotRegistered);
+			else
+				cb.IsUserRecieved(CloudCallback.IsUserResult.Registered);
+			return;
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// Else
+		cb.IsUserRecieved(CloudCallback.IsUserResult.Registered);
+	}
 }
