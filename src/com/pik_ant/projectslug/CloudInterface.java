@@ -34,7 +34,7 @@ public class CloudInterface {
 		t.start();
 	}
 	
-	public static void updatePosition(CloudCallback cb, User usr) {
+	public static void updatePosition(User usr, CloudCallback cb) {
 		final CloudCallback _cb = cb;
 		final User _usr = usr;
 		
@@ -50,7 +50,7 @@ public class CloudInterface {
 		t.start();
 	}
 	
-	public static void registerUser(CloudCallback cb, User usr) {
+	public static void registerUser(User usr, CloudCallback cb) {
 		final CloudCallback _cb = cb;
 		final User _usr = usr;
 		
@@ -66,7 +66,7 @@ public class CloudInterface {
 		t.start();
 	}
 	
-	public static void verifyUser(CloudCallback cb, User usr) {
+	public static void verifyUser(User usr, CloudCallback cb) {
 		final CloudCallback _cb = cb;
 		final User _usr = usr;
 		
@@ -82,7 +82,7 @@ public class CloudInterface {
 		t.start();
 	}
 	
-	public static void radiusSearch(CloudCallback cb, User usr, double radius) {
+	public static void radiusSearch(User usr, double radius, CloudCallback cb) {
 		final CloudCallback _cb = cb;
 		final User _usr = usr;
 		final double _radius = radius;
