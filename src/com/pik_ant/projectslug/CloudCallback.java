@@ -14,4 +14,10 @@ public class CloudCallback {
 	
 	// Callback for getting all users
 	public void GetUsersRecieved(List<User> lis) {};
+	
+	public void UpdatePositionRecieved(int errornum) {};
+	
+	public void RegisterUserRecieved(int errornum) {};
+
+	public void VerifyUserRecieved(IsUserResult res) {};
 }

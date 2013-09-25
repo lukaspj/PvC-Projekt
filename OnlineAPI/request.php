@@ -58,26 +58,20 @@ class request extends CI_Controller {
 				echo resp_delete_file($this, $data);
 				break;
 			// Android APP API ---
+			case "register_user":
+				echo resp_app_user_register($this, $data);
+			break;
 			case "update_position":
 				echo resp_app_update_position($this, $data);
+			break;
+			case "verify_user":
+				echo resp_app_verify_user($this, $data);
 			break;
 			case "all_app_users":
 				echo resp_all_app_users($this, $data);
 			break;
 			case "is_username_available":
-				echo resp_app_user_exists($this, $data);
-			break;
-			case "is_bob_available":
-				$this->load->model('app_model');
-				echo $this->app_model->usernameavailable("Bob") ? "1" : "0";
-			break;
-			case "is_ann_available":
-				$this->load->model('app_model');
-				echo $this->app_model->usernameavailable("Ann") ? "1" : "0";
-			break;
-			case "insert_dat_pos":
-				$this->load->model('app_model');
-				$this->app_model->updatePosition("Bob", 1.13, 4.15);
+				echo resp_app_user_available($this, $data);
 			break;
 			// Jonas APP API ---
 			case "jon_user_exists":
