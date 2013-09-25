@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapModifier implements LocationListener{
 
+	private boolean target = false;
 	private boolean updateMap = true;
 	private Location curLocation = new Location(LocationManager.GPS_PROVIDER);
 	private GoogleMap gMap;
@@ -144,13 +145,12 @@ public class MapModifier implements LocationListener{
 			builder.create().show();
 		}
 	}
-	public static class TargetDialogFragment extends DialogFragment {
-		private static boolean target = false;
+	public class TargetDialogFragment extends DialogFragment {
 		@Override
 		public Dialog onCreateDialog(Bundle b){
 			final boolean hasTarget = target;
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			builder.setMessage("Want to set " + marker.getTitle() + " as target?");
+			builder.setMessage(context.getString(R.string.confirm_target, marker.getTitle()));
 			builder.setPositiveButton("yes", new OnClickListener() {
 
 				@Override
@@ -161,7 +161,7 @@ public class MapModifier implements LocationListener{
 						target = true;
 					}
 					else{
-						Toast.makeText(getActivity(), "you all ready have a target",Toast.LENGTH_SHORT).show();
+						Toast.makeText(getActivity(), context.getString(R.string.error_target_exists), Toast.LENGTH_SHORT).show();
 					}
 				}
 			});
@@ -176,13 +176,11 @@ public class MapModifier implements LocationListener{
 			
 		}
 		
-		public static void hasTarget(boolean b){
-			 target = b;
-		}
+
 	}
 	
 	public void hasTarget(boolean b){
-		TargetDialogFragment.hasTarget(b);
+		target = b;
 	}
 
 
