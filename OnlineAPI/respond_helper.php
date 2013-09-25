@@ -199,13 +199,26 @@ if ( ! function_exists('resp_delete_file'))
 /**********************************/
 /********** ANDROID APP ***********/
 /**********************************/
-if(!function_exists('resp_app_user_exists'))
+if(!function_exists('resp_app_user_available'))
 {
-	function resp_app_user_exists($obj, $data)
+	function resp_app_user_available($obj, $data)
 	{
 		$obj->load->model('app_model');
 		$user = $obj->input->post('username');
 		return $obj->app_model->usernameavailable($user) ? "1" : "0";
+	}
+}
+if(!function_exists('resp_app_user_register'))
+{
+	function resp_app_user_register($obj, $data)
+	{
+		$obj->load->model('app_model');
+		$user = $obj->input->post('username');
+		$lat = $obj->input->post('lat');
+		$long = $obj->input->post('long');
+		$id = $obj->input->post('id');
+		$pass = $obj->input->post('pass');
+		return $obj->app_model->registerUser($user, $lat, $long, $id, $pass);
 	}
 }
 
