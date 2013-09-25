@@ -176,11 +176,11 @@ public class CloudWorker {
 			String inputLine = br.readLine();
 			// Interpret the result
 			if(inputLine.contains("-1"))
-				cb.IsUserRecieved(CloudCallback.IsUserResult.MultipleRegistered);
+				cb.VerifyUserRecieved(CloudCallback.IsUserResult.MultipleRegistered);
 			else if(inputLine.contains("1"))
-				cb.IsUserRecieved(CloudCallback.IsUserResult.NotRegistered);
+				cb.VerifyUserRecieved(CloudCallback.IsUserResult.NotRegistered);
 			else
-				cb.IsUserRecieved(CloudCallback.IsUserResult.Registered);
+				cb.VerifyUserRecieved(CloudCallback.IsUserResult.Registered);
 			return;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -190,7 +190,7 @@ public class CloudWorker {
 			e.printStackTrace();
 		}
 		// Else
-		cb.IsUserRecieved(CloudCallback.IsUserResult.Registered);
+		cb.VerifyUserRecieved(CloudCallback.IsUserResult.Registered);
 	}
 	
 	public static void UserRadiusSearchWork(CloudCallback cb, User usr, double radius) {
