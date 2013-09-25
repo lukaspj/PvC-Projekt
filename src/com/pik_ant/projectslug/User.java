@@ -17,6 +17,7 @@ public class User {
 	private byte[] enc_password;
 	public byte[] getEncPassword() { return enc_password; };
 	public void setPassword(String pass){
+		password = pass;
 		try {
 			SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 			KeySpec spec = new PBEKeySpec(password.toCharArray());
