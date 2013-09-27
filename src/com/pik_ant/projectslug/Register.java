@@ -1,6 +1,8 @@
 package com.pik_ant.projectslug;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import android.widget.TextView.OnEditorActionListener;
 
 public class Register extends Activity {
 
+	private SharedPreferences sharedPref;
 	private Resources resourses;
 	private EditText usrName;
 	private EditText usrPass_1;
@@ -142,6 +145,9 @@ public class Register extends Activity {
 
 	public void register(View view){
 		btn_regi.setClickable(false);
+		sharedPref = getPreferences(MODE_PRIVATE);
+		
+		final Intent intent = new Intent(this, Login.class);
 		
 		//Loading animation
 		ProgressBar loading_animation = (ProgressBar) findViewById(R.id.load_anim);
@@ -152,8 +158,8 @@ public class Register extends Activity {
 		//Get user name and password
 		usrName = (EditText) findViewById(R.id.choose_usr);
 		usrPass_1 = (EditText) findViewById(R.id.choose_pass);
-		String userName = usrName.getText().toString();
-		String userPass = usrPass_1.getText().toString();
+		final String userName = usrName.getText().toString();
+		final String userPass = usrPass_1.getText().toString();
 		
 		
 		User user = new User();
@@ -166,9 +172,23 @@ public class Register extends Activity {
 		//user.BluetoothID = ???;
 		
 		CloudInterface.registerUser(user, new CloudCallback(){
+			Runnable wasRegistered = new Runnable(){
+				@Override
+				public void run(){
+					SharedPreferences.Editor editor = sharedPref.edit();
+					editor.putString(getString(R.string.last_user), userName);
+					editor.putString(getString(R.string.last_pass), userPass);
+					editor.commit();
+					
+					startActivity(intent);
+				}
+			};
+			
 			@Override
 			public void RegisterUserRecieved(int errornum){
-				
+				if(-1 <= errornum & errornum <= 1){
+					runOnUiThread(wasRegistered);
+				}
 			}
 		});
 		

@@ -1,7 +1,5 @@
 package com.pik_ant.projectslug;
 
-import com.pik_ant.projectslug.CloudCallback.IsUserResult;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -81,6 +79,7 @@ public class Login extends Activity {
 					editor.putString(getString(R.string.last_user), userName);
 					editor.putString(getString(R.string.last_pass), userPass);
 					editor.commit();
+					login_btn.setClickable(true);
 					
 					startActivity(intent);
 				}
