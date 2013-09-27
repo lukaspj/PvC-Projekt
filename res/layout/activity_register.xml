@@ -80,6 +80,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/btn_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -87,7 +88,14 @@
         android:text="@string/button_regi" />
     
     <TextView
-        android:id="@+id/errorMessage"
+        android:id="@+id/passwordError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" 
+        android:visibility="invisible"/>
+    
+    <TextView 
+        android:id="@+id/userNameError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center" 
