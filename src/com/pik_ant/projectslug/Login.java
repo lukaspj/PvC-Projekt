@@ -1,5 +1,7 @@
 package com.pik_ant.projectslug;
 
+import com.pik_ant.projectslug.CloudCallback.IsUserResult;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -53,7 +55,7 @@ public class Login extends Activity {
 		final Intent intent = new Intent(this, Map.class);
 		
 		//Disable login button, so that the server doesn't get flooded with requests
-		Button login_btn = (Button) findViewById(R.id.btn_login);
+		final Button login_btn = (Button) findViewById(R.id.btn_login);
 		login_btn.setClickable(false);
 		
 		//Loading animation
@@ -70,7 +72,7 @@ public class Login extends Activity {
 		user.Username = userName;
 		user.setPassword(userPass);
 		
-		CloudInterface.verifyUser(new CloudCallback(){
+		CloudInterface.verifyUser(user, new CloudCallback(){
 			
 			Runnable accept = new Runnable(){
 				@Override
@@ -88,12 +90,13 @@ public class Login extends Activity {
 				@Override
 				public void run(){
 					//set error message
+					login_btn.setClickable(true);
 					loading_animation.setVisibility(4);
 					loading_text.setVisibility(4);
 				}
 			};
 			@Override
-			public void IsUserRecieved(IsUserResult res){
+			public void VerifyUserRecieved(IsUserResult res){
 					if(res == IsUserResult.Registered){
 						runOnUiThread(accept);
 					}
@@ -104,7 +107,7 @@ public class Login extends Activity {
 						runOnUiThread(decline);
 					}
 			}
-		}, user);
+		});
 		
 	}
 	

@@ -95,7 +95,7 @@ public class Register extends Activity {
 					usrCheck.setImageDrawable(resourses.getDrawable(R.drawable.raemi_check_mark));
 					usrCheck.setVisibility(0);
 					errorMess.setVisibility(4);
-					CloudInterface.registerUser(new CloudCallback(){}, user);
+					//CloudInterface.registerUser(user, new CloudCallback(){});
 				}
 			};
 
