@@ -1,10 +1,13 @@
 package com.pik_ant.projectslug;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -30,6 +33,19 @@ public class Register extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register);
 		resourses = getResources();
+		
+		//Check for network connection
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+		boolean isConnected = activeNetwork.isConnectedOrConnecting();
+		TextView errorConn = (TextView) findViewById(R.id.connectionError);
+		
+		if(!isConnected){
+			btn_regi.setClickable(false);
+			errorConn.setText("Not connected to network");
+			errorConn.setTextColor(Color.RED);
+			errorConn.setVisibility(0);
+		}
 
 		//Disable button, until user name is available and passwords match
 		btn_regi = (Button) findViewById(R.id.btn_register);
@@ -42,11 +58,11 @@ public class Register extends Activity {
 
 		//Add an action listener to the 'repeat password'
 		usrPass_2.setOnEditorActionListener(new OnEditorActionListener() {
-			Boolean userAvail = false;
-			Boolean passMatch = false;
+			boolean userAvail = false;
+			boolean passMatch = false;
 			
 			@Override
-			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {			
 				String pass_1 = usrPass_1.getText().toString();
 				String pass_2 = usrPass_2.getText().toString();
 				String userName = usrName.getText().toString();
