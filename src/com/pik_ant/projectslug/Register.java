@@ -184,7 +184,7 @@ public class Register extends Activity {
 		//Dummy coordinates sending the new user to Java island, Indonesia
 		user.lat = -7.491667;
 		user.lng = 110.004444;
-		//The devices mac address is returned as a string, not an int
+		//The devices mac-address is returned as a string, not an int
 		//user.BluetoothID = ???;
 		
 		CloudInterface.registerUser(user, new CloudCallback(){
@@ -202,7 +202,7 @@ public class Register extends Activity {
 			
 			@Override
 			public void RegisterUserRecieved(int errornum){
-				if(-1 <= errornum & errornum <= 1){
+				if(errornum == 0){
 					runOnUiThread(wasRegistered);
 				}
 			}
