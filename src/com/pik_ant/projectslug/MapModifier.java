@@ -98,13 +98,19 @@ public class MapModifier implements LocationListener{
 		final GoogleMap map = gMap;
 		CloudInterface.getUsers(new CloudCallback(){
 			public void GetUsersRecieved(List<User> lis){
-				ArrayList<Marker> _markers = markers;
 				if(!lis.isEmpty()){
 					for(int i = 0; i<lis.size(); i++){
 						final User u = lis.get(i);
-						if(!markers.isEmpty()){
-							markers.get(i).setPosition(new LatLng(u.lat, u.lng));
-							_markers.remove(i);
+						final int _i = i;
+						if(i<markers.size()){
+							handler.post(new Runnable() {
+								
+								@Override
+								public void run() {
+									// TODO Auto-generated method stub
+									markers.get(_i).setPosition(new LatLng(u.lat, u.lng));
+								}
+							});
 						}
 						else{
 							handler.post(new Runnable() {
@@ -165,7 +171,7 @@ public class MapModifier implements LocationListener{
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
 					if(!hasTarget){
-						marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.slug_launcher));
+						marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.crosshair));
 						target = true;
 					}
 					else{
@@ -213,6 +219,7 @@ public class MapModifier implements LocationListener{
 				}
 			};
 		});
+		updateMarkers();
 	}
 
 	@Override

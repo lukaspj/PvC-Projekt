@@ -51,7 +51,7 @@ public class Login extends Activity {
 	//Called when pressing login button
 	public void login(View view){
 		final Intent intent = new Intent(this, Map.class);
-		
+		startActivity(intent);
 		//Disable login button, so that the server doesn't get flooded with requests
 		Button login_btn = (Button) findViewById(R.id.btn_login);
 		login_btn.setClickable(false);

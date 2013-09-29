@@ -1,9 +1,15 @@
 package com.pik_ant.projectslug;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -33,6 +39,8 @@ public class Map extends Activity{
 		modifier = new MapModifier(gMap, locationManager, this, getFragmentManager());
 		modifier.getLocation();
 		modifier.getLocationMarkers();
+		Intent i = new Intent(this, BluetoothService.class);
+		startService(i);	
 	}
 
 	@Override
@@ -45,9 +53,8 @@ public class Map extends Activity{
 	@Override
 	protected void onResume(){
 		super.onResume();
-		//modifier.updateMarkers();
+		modifier.updateMarkers();
 	}
-	
 	
 	
 	
