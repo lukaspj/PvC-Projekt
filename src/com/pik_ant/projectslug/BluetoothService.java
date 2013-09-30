@@ -11,7 +11,7 @@ import android.os.IBinder;
 import android.widget.Toast;
 
 public class BluetoothService extends Service {
-	private BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+	private BluetoothAdapter adapter;
 	private final Context c = this;
 	public BluetoothService() {
 	}
@@ -25,7 +25,7 @@ public class BluetoothService extends Service {
 	@Override
 	public void onCreate() 
 	{               
-
+		adapter = (BluetoothAdapter) getSystemService(BLUETOOTH_SERVICE);
 	    Toast.makeText(this, "Service created", Toast.LENGTH_LONG).show();
 	}
 
