@@ -12,7 +12,7 @@ public class User {
 	public String Username;
 	public double lat;
 	public double lng;
-	public int BluetoothID;
+	public String BluetoothID;
 	private String password;
 	private byte[] enc_password;
 	public byte[] getEncPassword() { return enc_password; };

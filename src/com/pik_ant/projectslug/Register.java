@@ -1,6 +1,7 @@
 package com.pik_ant.projectslug;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,6 +28,7 @@ public class Register extends Activity {
 	private EditText usrPass_1;
 	private EditText usrPass_2;
 	private Button btn_regi;
+	private BluetoothAdapter bta;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -162,6 +164,7 @@ public class Register extends Activity {
 	public void register(View view){
 		btn_regi.setClickable(false);
 		sharedPref = getPreferences(MODE_PRIVATE);
+		bta = BluetoothAdapter.getDefaultAdapter();
 		
 		final Intent intent = new Intent(this, Login.class);
 		
@@ -184,8 +187,7 @@ public class Register extends Activity {
 		//Dummy coordinates sending the new user to Java island, Indonesia
 		user.lat = -7.491667;
 		user.lng = 110.004444;
-		//The devices mac-address is returned as a string, not an int
-		//user.BluetoothID = ???;
+		user.BluetoothID = bta.getAddress();
 		
 		CloudInterface.registerUser(user, new CloudCallback(){
 			Runnable wasRegistered = new Runnable(){
