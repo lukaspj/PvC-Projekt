@@ -1,5 +1,7 @@
 package com.pik_ant.projectslug;
 
+import java.io.UnsupportedEncodingException;
+
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
@@ -44,6 +46,7 @@ public class Register extends Activity {
 		
 		if(!isConnected){
 			btn_regi.setClickable(false);
+			btn_regi.setAlpha((float) 0.5);
 			errorConn.setText("Not connected to network");
 			errorConn.setTextColor(Color.RED);
 			errorConn.setVisibility(0);
@@ -52,6 +55,7 @@ public class Register extends Activity {
 		//Disable button, until user name is available and passwords match
 		btn_regi = (Button) findViewById(R.id.btn_register);
 		btn_regi.setClickable(false);
+		btn_regi.setAlpha((float) 0.5);
 		
 		//Get password/user name and views
 		usrPass_1 = (EditText) findViewById(R.id.choose_pass);
@@ -74,6 +78,7 @@ public class Register extends Activity {
 				//Check for password length of match
 				if(pass_1.length() < 4){
 					btn_regi.setClickable(false);
+					btn_regi.setAlpha((float) 0.5);
 					passCheck.setImageDrawable(resourses.getDrawable(R.drawable.checkerror));
 					passCheck.setVisibility(0);
 					errorPass.setText("Password must have length of at least 4 characters");
@@ -89,6 +94,7 @@ public class Register extends Activity {
 				}
 				else {
 					btn_regi.setClickable(false);
+					btn_regi.setAlpha((float) 0.5);
 					passCheck.setImageDrawable(resourses.getDrawable(R.drawable.checkerror));
 					passCheck.setVisibility(0);
 					errorPass.setText("The two passwords doesn't match");
@@ -111,6 +117,11 @@ public class Register extends Activity {
 							usrCheck.setVisibility(0);
 							errorUser.setVisibility(4);
 							passMatch = true;
+							
+							if (passMatch & userAvail){
+								btn_regi.setClickable(true);
+								btn_regi.setAlpha((float) 1);
+							}
 						}
 					};
 
@@ -119,6 +130,7 @@ public class Register extends Activity {
 						@Override
 						public void run(){
 							btn_regi.setClickable(false);
+							btn_regi.setAlpha((float) 0.5);
 							usrCheck.setImageDrawable(resourses.getDrawable(R.drawable.checkerror));
 							usrCheck.setVisibility(0);
 							errorUser.setText("The chosen username is already taken");
@@ -143,11 +155,7 @@ public class Register extends Activity {
 					}
 
 				});
-				
-				if (passMatch & userAvail){
-					btn_regi.setClickable(true);
-				}
-				
+								
 				return false;
 			}
 		});
@@ -169,8 +177,8 @@ public class Register extends Activity {
 		final Intent intent = new Intent(this, Login.class);
 		
 		//Loading animation
-		ProgressBar loading_animation = (ProgressBar) findViewById(R.id.load_anim);
-		TextView loading_text = (TextView) findViewById(R.id.load_text);
+		final ProgressBar loading_animation = (ProgressBar) findViewById(R.id.load_anim);
+		final TextView loading_text = (TextView) findViewById(R.id.load_text);
 		loading_animation.setVisibility(0);
 		loading_text.setVisibility(0);
 
@@ -179,20 +187,24 @@ public class Register extends Activity {
 		usrPass_1 = (EditText) findViewById(R.id.choose_pass);
 		final String userName = usrName.getText().toString();
 		final String userPass = usrPass_1.getText().toString();
-		
+		String bluetoothId = bta.getAddress();
 		
 		User user = new User();
 		user.Username = userName;
 		user.setPassword(userPass);
-		//Dummy coordinates sending the new user to Java island, Indonesia
+		//Dummy coordinates sending the new user to Java island
 		user.lat = -7.491667;
 		user.lng = 110.004444;
-		user.BluetoothID = bta.getAddress();
+		user.BluetoothID = bluetoothId;
 		
+		/*
 		CloudInterface.registerUser(user, new CloudCallback(){
 			Runnable wasRegistered = new Runnable(){
 				@Override
-				public void run(){
+				public void run(){					
+					loading_animation.setVisibility(4);
+					loading_text.setVisibility(4);
+					
 					SharedPreferences.Editor editor = sharedPref.edit();
 					editor.putString(getString(R.string.last_user), userName);
 					editor.putString(getString(R.string.last_pass), userPass);
@@ -208,10 +220,9 @@ public class Register extends Activity {
 					runOnUiThread(wasRegistered);
 				}
 			}
-		});
+		});*/
 		
-		loading_animation.setVisibility(4);
-		loading_text.setVisibility(4);
+		
 
 	}
 

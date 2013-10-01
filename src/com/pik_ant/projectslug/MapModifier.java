@@ -3,6 +3,7 @@ package com.pik_ant.projectslug;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -145,6 +146,7 @@ public class MapModifier implements LocationListener{
 			builder.create().show();
 		}
 	}
+	@SuppressLint("ValidFragment")
 	public class TargetDialogFragment extends DialogFragment {
 		@Override
 		public Dialog onCreateDialog(Bundle b){
