@@ -171,6 +171,7 @@ public class Register extends Activity {
 
 	public void register(View view){
 		btn_regi.setClickable(false);
+		btn_regi.setAlpha((float) 0.5);
 		sharedPref = getPreferences(MODE_PRIVATE);
 		bta = BluetoothAdapter.getDefaultAdapter();
 		
@@ -197,8 +198,10 @@ public class Register extends Activity {
 		user.lng = 110.004444;
 		user.BluetoothID = bluetoothId;
 		
-		/*
+		
 		CloudInterface.registerUser(user, new CloudCallback(){
+			TextView registrationError = (TextView) findViewById(R.id.passwordError);
+			
 			Runnable wasRegistered = new Runnable(){
 				@Override
 				public void run(){					
@@ -214,13 +217,30 @@ public class Register extends Activity {
 				}
 			};
 			
+			Runnable error = new Runnable() {
+				
+				@Override
+				public void run() {
+					loading_animation.setVisibility(4);
+					loading_text.setVisibility(4);
+					btn_regi.setClickable(true);
+					btn_regi.setAlpha((float) 1);
+					
+					registrationError.setText("An error occured");
+					registrationError.setVisibility(0);
+				}
+			};
+			
 			@Override
 			public void RegisterUserRecieved(int errornum){
 				if(errornum == 0){
 					runOnUiThread(wasRegistered);
 				}
+				else{
+					runOnUiThread(error);
+				}
 			}
-		});*/
+		});
 		
 		
 
