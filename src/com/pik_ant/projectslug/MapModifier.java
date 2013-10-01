@@ -53,7 +53,6 @@ public class MapModifier implements LocationListener{
 
 			@Override
 			public boolean onMarkerClick(Marker _marker) {
-				// TODO Auto-generated method stub
 				marker = _marker;
 				TargetDialogFragment target = new TargetDialogFragment();
 				target.show(fManager, "target dialog");
@@ -80,7 +79,6 @@ public class MapModifier implements LocationListener{
 
 								@Override
 								public void run() {
-									// TODO Auto-generated method stub
 									markers.add(map.addMarker(new MarkerOptions()
 									.position(new LatLng(u2.lat, u2.lng))
 									.title(u2.Username)));
@@ -98,20 +96,24 @@ public class MapModifier implements LocationListener{
 		final GoogleMap map = gMap;
 		CloudInterface.getUsers(new CloudCallback(){
 			public void GetUsersRecieved(List<User> lis){
-				ArrayList<Marker> _markers = markers;
 				if(!lis.isEmpty()){
 					for(int i = 0; i<lis.size(); i++){
 						final User u = lis.get(i);
-						if(!markers.isEmpty()){
-							markers.get(i).setPosition(new LatLng(u.lat, u.lng));
-							_markers.remove(i);
+						final int _i = i;
+						if(i<markers.size()){
+							handler.post(new Runnable() {
+								
+								@Override
+								public void run() {
+									markers.get(_i).setPosition(new LatLng(u.lat, u.lng));
+								}
+							});
 						}
 						else{
 							handler.post(new Runnable() {
 
 								@Override
 								public void run() {
-									// TODO Auto-generated method stub
 									markers.add(map.addMarker(new MarkerOptions()
 									.position(new LatLng(u.lat, u.lng))
 									.title(u.Username)));
@@ -163,9 +165,8 @@ public class MapModifier implements LocationListener{
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
 					if(!hasTarget){
-						marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.slug_launcher));
+						marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.crosshair));
 						target = true;
 					}
 					else{
@@ -177,7 +178,6 @@ public class MapModifier implements LocationListener{
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
 				}
 			});
 			return builder.create();
@@ -194,7 +194,6 @@ public class MapModifier implements LocationListener{
 
 	@Override
 	public void onLocationChanged(Location location) {
-		// TODO Auto-generated method stub
 		curLocation = location;
 		if (updateMap) {
 			gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(getLatLng(curLocation), 13));
@@ -213,23 +212,21 @@ public class MapModifier implements LocationListener{
 				}
 			};
 		});
+		updateMarkers();
 	}
 
 	@Override
 	public void onProviderDisabled(String provider) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-		// TODO Auto-generated method stub
 
 	}
 }
