@@ -140,12 +140,7 @@ public class CloudWorker {
 			BufferedReader br = new BufferedReader(
                                new InputStreamReader(conn.getInputStream()));
 			String line = br.readLine();
-			line = line.trim();
-			if(line.equals("0"))
-			{
-				cb.RegisterUserRecieved(0);
-				return;
-			}
+			line = line.trim().replace("\0", "");
 			int errornum = Integer.parseInt(line);
 			cb.RegisterUserRecieved(errornum);
 			return;
