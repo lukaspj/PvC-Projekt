@@ -201,7 +201,7 @@ public class MapModifier implements LocationListener{
 			updateMap = false;
 		}
 		String userName=sharedPrefs.getString(context.getString(R.string.last_user), "");
-		User u = new User(userName, location, 0);
+		User u = new User(userName, location, "");
 
 		CloudInterface.updatePosition(u, new CloudCallback(){
 			public void UpdatePositionRecieved(int errornum) {
