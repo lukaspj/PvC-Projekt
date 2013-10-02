@@ -84,6 +84,7 @@ public class CloudWorker {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		// Else
 		cb.GetUsersRecieved(retUsers);
 	}
 	
@@ -108,7 +109,6 @@ public class CloudWorker {
 			line = line.trim();
 			int errornum = Integer.parseInt(line);
 			cb.UpdatePositionRecieved(errornum);
-			return;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -141,7 +141,6 @@ public class CloudWorker {
 			line = line.trim();
 			int errornum = Integer.parseInt(line);
 			cb.RegisterUserRecieved(errornum);
-			return;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -179,9 +178,9 @@ public class CloudWorker {
 			if(inputLine.contains("-1"))
 				cb.VerifyUserRecieved(CloudCallback.IsUserResult.MultipleRegistered);
 			else if(inputLine.contains("1"))
-				cb.VerifyUserRecieved(CloudCallback.IsUserResult.NotRegistered);
-			else
 				cb.VerifyUserRecieved(CloudCallback.IsUserResult.Registered);
+			else
+				cb.VerifyUserRecieved(CloudCallback.IsUserResult.NotRegistered);
 			return;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -233,6 +232,7 @@ public class CloudWorker {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		// Else
 		cb.RadiusSearchRecieved(retUsers);
 	}
 }

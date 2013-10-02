@@ -19,9 +19,9 @@ class App_model extends CI_Model {
 		if($query->num_rows() > 1)
 			return -1;
 		else if($query->num_rows() == 1)
-			return false;
-		else
 			return true;
+		else
+			return false;
 	}
 	
 	public function allAppUsers()
@@ -73,21 +73,6 @@ class App_model extends CI_Model {
 		return $CI->db->query("SELECT name, X(position) AS x, Y(position) AS y FROM nn_users WHERE Intersects( position, GeomFromText(CONCAT('POLYGON($bbox)')) ) AND SQRT(POW( ABS( X(position) - $lat), 2) + POW( ABS( Y(position) - $long), 2)) < $radius");
 	}
 	
-	public function verifyPass($username, $password, $updateFlags = true)
-	{
-		log_message("error", "MYSQL ERROR verifyPass: " . $username . "  -  " . $password);
-		$CI =& get_instance();
-		$query = $CI->db->query("SELECT * FROM nn_users WHERE username='$username' AND password='$password'");
-		if($CI->db->_error_number() != 0)
-			log_message("error", "MYSQL ERROR verifyPass: " . $CI->db->_error_message() );
-		if($CI->db->_error_number() == 0){
-			$result = $query->result();
-			$CI->session->set_userdata('flags', $result[0]->flags);
-			return TRUE;
-		}
-		else
-			return FALSE;
-	}
 	
 	/**********************************/
 	/************* JONAS **************/
@@ -132,6 +117,48 @@ class App_model extends CI_Model {
 		$CI =& get_instance();
 		$query = $CI->db->query("SELECT name, X(position) x, Y(position) y, time FROM jon_users WHERE deviceid != '$mydeviceid'");
 		return $query;
+	}
+	
+	public function jon_associationexists($deviceid, $btid)
+	{
+		$CI =& get_instance();
+		$query = $CI->db->query("SELECT * FROM jon_associations WHERE deviceid='$deviceid' AND btid='$btid'");
+		if($query->num_rows() > 1)
+			return - 1;
+		else
+			return $query->num_rows() == 1 ? true : false;
+	}
+	
+	public function jon_createAssociation($deviceid, $btid, $contactid)
+	{
+		$CI =& get_instance();
+		if($this->jon_associationexists($deviceid, $btid))
+		{
+			$query = $CI->db->query("UPDATE jon_associations SET contactid='$contactid' WHERE deviceid='$deviceid' AND btid='$btid'");
+			return $CI->db->_error_number();
+		} else {
+			$query = $CI->db->query("INSERT INTO jon_associations (deviceid, btid, contactid) VALUES ('$deviceid', '$btid', '$contactid')");
+			return $CI->db->_error_number();
+		}
+	}
+	
+	public function jon_getAssociations($mydeviceid)
+	{
+		$CI =& get_instance();
+		$query = $CI->db->query("SELECT btid, contactid FROM jon_associations WHERE deviceid = '$mydeviceid'");
+		return $query;
+	}
+	
+	public function jon_deleteAssociation($deviceid, $btid){
+		$CI =& get_instance();
+		$query = $CI->db->query("DELETE FROM jon_associations WHERE deviceid = '$deviceid' AND btid = '$btid'");
+		return $CI->db->_error_number();
+	}
+	
+	public function jon_deleteUser($deviceid){
+		$CI =& get_instance();
+		$query = $CI->db->query("DELETE FROM jon_users WHERE deviceid = '$deviceid'");
+		return $CI->db->_error_number();
 	}
 }
 /* END OF FILE */

@@ -76,6 +76,10 @@ class request extends CI_Controller {
 			case "is_username_available":
 				echo resp_app_user_available($this, $data);
 			break;
+			case "test_isUser":
+				$this->load->model('app_model');
+				echo $this->app_model->usernameavailable("Thusboll") ? "1" : "0";
+			break;
 			// Jonas APP API ---
 			case "jon_user_exists":
 				echo jon_app_user_exists($this, $data);
@@ -89,9 +93,20 @@ class request extends CI_Controller {
 			case "jon_get_other_users":
 				echo jon_app_get_other_users($this, $data);
 			break;
-			case "tulstrup_exists":
-				$this->load->model('app_model');
-				echo $this->app_model->jon_userexists("3E4D09D928B20B15") ? "1" : "0";
+			case "jon_app_association_exists":
+				echo jon_app_association_exists($this, $data);
+			break;
+			case "jon_app_create_association":
+				echo jon_app_create_association($this, $data);
+			break;
+			case "jon_app_get_associations":
+				echo jon_app_get_associations($this, $data);
+			break;
+			case "jon_app_delete_association":
+				echo jon_app_delete_association($this, $data);
+			break;
+			case "jon_app_delete_user":
+				echo jon_app_delete_user($this, $data);
 			break;
 		}
 	}
