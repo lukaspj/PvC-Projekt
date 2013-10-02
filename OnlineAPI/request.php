@@ -76,6 +76,10 @@ class request extends CI_Controller {
 			case "is_username_available":
 				echo resp_app_user_available($this, $data);
 			break;
+			case "test_isUser":
+				$this->load->model('app_model');
+				echo $this->app_model->usernameavailable("Thusboll") ? "1" : "0";
+			break;
 			// Jonas APP API ---
 			case "jon_user_exists":
 				echo jon_app_user_exists($this, $data);

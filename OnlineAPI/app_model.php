@@ -19,9 +19,9 @@ class App_model extends CI_Model {
 		if($query->num_rows() > 1)
 			return -1;
 		else if($query->num_rows() == 1)
-			return false;
-		else
 			return true;
+		else
+			return false;
 	}
 	
 	public function allAppUsers()
@@ -87,21 +87,6 @@ WHERE Intersects( location, GeomFromText(@bbox) )
 AND SQRT(POW( ABS( X(location) - X(@center)), 2) + POW( ABS(Y(location) - Y(@center)), 2 )) < @radius; To Obtain a result ordered by distance from the center of the selection area: */
 	}
 	
-	public function verifyPass($username, $password, $updateFlags = true)
-	{
-		log_message("error", "MYSQL ERROR verifyPass: " . $username . "  -  " . $password);
-		$CI =& get_instance();
-		$query = $CI->db->query("SELECT * FROM nn_users WHERE username='$username' AND password='$password'");
-		if($CI->db->_error_number() != 0)
-			log_message("error", "MYSQL ERROR verifyPass: " . $CI->db->_error_message() );
-		if($CI->db->_error_number() == 0){
-			$result = $query->result();
-			$CI->session->set_userdata('flags', $result[0]->flags);
-			return TRUE;
-		}
-		else
-			return FALSE;
-	}
 	
 	/**********************************/
 	/************* JONAS **************/
