@@ -109,6 +109,7 @@ public class CloudWorker {
 			line = line.trim();
 			int errornum = Integer.parseInt(line);
 			cb.UpdatePositionRecieved(errornum);
+			return;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -140,8 +141,14 @@ public class CloudWorker {
                                new InputStreamReader(conn.getInputStream()));
 			String line = br.readLine();
 			line = line.trim();
+			if(line.equals("0"))
+			{
+				cb.RegisterUserRecieved(0);
+				return;
+			}
 			int errornum = Integer.parseInt(line);
 			cb.RegisterUserRecieved(errornum);
+			return;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
