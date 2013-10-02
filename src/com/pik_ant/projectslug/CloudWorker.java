@@ -178,9 +178,9 @@ public class CloudWorker {
 			if(inputLine.contains("-1"))
 				cb.VerifyUserRecieved(CloudCallback.IsUserResult.MultipleRegistered);
 			else if(inputLine.contains("1"))
-				cb.VerifyUserRecieved(CloudCallback.IsUserResult.NotRegistered);
-			else
 				cb.VerifyUserRecieved(CloudCallback.IsUserResult.Registered);
+			else
+				cb.VerifyUserRecieved(CloudCallback.IsUserResult.NotRegistered);
 			return;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
