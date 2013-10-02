@@ -1,6 +1,5 @@
 package com.pik_ant.projectslug;
 
-import java.io.UnsupportedEncodingException;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;

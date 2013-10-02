@@ -130,6 +130,7 @@ public class CloudWorker {
 			
 			OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
 			
+			
 			// Send our POST data
 			writer.write("username="+usr.Username+"&lat="+usr.lat+"&long="+usr.lng+"&id="+usr.BluetoothID+"&password="+usr.getEncPassword().toString());
 			writer.flush();

@@ -31,7 +31,7 @@ public class User {
 	}
 
 
-	public byte[] getEncPassword() { return enc_password; };
+	public String getEncPassword() { return new String(enc_password); }
 	public void setPassword(String pass){
 		password = pass;
 		try {
