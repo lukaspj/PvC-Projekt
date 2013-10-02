@@ -118,5 +118,47 @@ class App_model extends CI_Model {
 		$query = $CI->db->query("SELECT name, X(position) x, Y(position) y, time FROM jon_users WHERE deviceid != '$mydeviceid'");
 		return $query;
 	}
+	
+	public function jon_associationexists($deviceid, $btid)
+	{
+		$CI =& get_instance();
+		$query = $CI->db->query("SELECT * FROM jon_associations WHERE deviceid='$deviceid' AND btid='$btid'");
+		if($query->num_rows() > 1)
+			return - 1;
+		else
+			return $query->num_rows() == 1 ? true : false;
+	}
+	
+	public function jon_createAssociation($deviceid, $btid, $contactid)
+	{
+		$CI =& get_instance();
+		if($this->jon_associationexists($deviceid, $btid))
+		{
+			$query = $CI->db->query("UPDATE jon_associations SET contactid='$contactid' WHERE deviceid='$deviceid' AND btid='$btid'");
+			return $CI->db->_error_number();
+		} else {
+			$query = $CI->db->query("INSERT INTO jon_associations (deviceid, btid, contactid) VALUES ('$deviceid', '$btid', '$contactid')");
+			return $CI->db->_error_number();
+		}
+	}
+	
+	public function jon_getAssociations($mydeviceid)
+	{
+		$CI =& get_instance();
+		$query = $CI->db->query("SELECT btid, contactid FROM jon_associations WHERE deviceid = '$mydeviceid'");
+		return $query;
+	}
+	
+	public function jon_deleteAssociation($deviceid, $btid){
+		$CI =& get_instance();
+		$query = $CI->db->query("DELETE FROM jon_associations WHERE deviceid = '$deviceid' AND btid = '$btid'");
+		return $CI->db->_error_number();
+	}
+	
+	public function jon_deleteUser($deviceid){
+		$CI =& get_instance();
+		$query = $CI->db->query("DELETE FROM jon_users WHERE deviceid = '$deviceid'");
+		return $CI->db->_error_number();
+	}
 }
 /* END OF FILE */

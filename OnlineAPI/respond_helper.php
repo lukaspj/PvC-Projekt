@@ -345,4 +345,71 @@ if(!function_exists('jon_app_get_other_users'))
 	}
 }
 
+if(!function_exists('jon_app_association_exists'))
+{
+	function jon_app_association_exists($obj, $data)
+	{
+		$obj->load->model('app_model');
+		$deviceid = $obj->input->post('deviceid');
+		$btid = $obj->input->post('btid');
+		return $obj->app_model->jon_associationexists($deviceid, $btid) ? "1" : "0";
+	}
+}
+
+if(!function_exists('jon_app_create_association'))
+{
+	function jon_app_create_association($obj, $data)
+	{
+		$obj->load->model('app_model');
+		$deviceid = $obj->input->post('deviceid');
+		$btid = $obj->input->post('btid');
+		$contactid = $obj->input->post('contactid');
+		return $obj->app_model->jon_createAssociation($deviceid, $btid, $contactid);
+	}
+}
+
+if(!function_exists('jon_app_get_associations'))
+{
+	function jon_app_get_associations($obj, $data)
+	{
+		$obj->load->model('app_model');
+		$mydeviceid = $obj->input->post('mydeviceid');
+		$result = $obj->app_model->jon_getAssociations($mydeviceid);
+		
+		$allassociationarray = array();
+		$count = 0;
+		
+		foreach($result->result() as $row){
+			$singleassociationarray[0] = $row->btid;
+			$singleassociationarray[1] = $row->contactid;
+			
+			$allassociationarray[$count] = $singleassociationarray;	
+			$count = $count+1;
+		}
+		
+		return json_encode($allassociationarray);
+	}
+}
+
+if(!function_exists('jon_app_delete_association'))
+{
+	function jon_app_delete_association($obj, $data)
+	{
+		$obj->load->model('app_model');
+		$deviceid = $obj->input->post('deviceid');
+		$btid = $obj->input->post('btid');
+		return $obj->app_model->jon_deleteAssociation($deviceid, $btid);
+	}
+}
+
+if(!function_exists('jon_app_delete_user'))
+{
+	function jon_app_delete_user($obj, $data)
+	{
+		$obj->load->model('app_model');
+		$deviceid = $obj->input->post('deviceid');
+		return $obj->app_model->jon_deleteUser($deviceid);
+	}
+}
+
 /** END OF FILE **/
