@@ -58,7 +58,7 @@ class request extends CI_Controller {
 				echo resp_delete_file($this, $data);
 				break;
 			// Android APP API ---
-			case "register_user":
+			case "app_register_user":
 				echo resp_app_user_register($this, $data);
 			break;
 			case "update_position":

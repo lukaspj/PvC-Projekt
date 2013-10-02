@@ -124,7 +124,7 @@ public class CloudWorker {
 		URL url;
 		try{
 			// get URL content
-			url = new URL("http://fuzzyvoidstudio.com/request/get/register_user/");
+			url = new URL("http://fuzzyvoidstudio.com/request/get/app_register_user/");
 			URLConnection conn = url.openConnection();
 			conn.setDoOutput(true);
 			
