@@ -1,7 +1,5 @@
 package com.pik_ant.projectslug;
 
-import com.pik_ant.projectslug.CloudCallback.IsUserResult;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -57,6 +55,7 @@ public class Login extends Activity {
 		//Disable login button, so that the server doesn't get flooded with requests
 		final Button login_btn = (Button) findViewById(R.id.btn_login);
 		login_btn.setClickable(false);
+		login_btn.setAlpha((float) 0.5);
 		
 		//Loading animation
 		final ProgressBar loading_animation = (ProgressBar) findViewById(R.id.load_anim);
@@ -81,6 +80,8 @@ public class Login extends Activity {
 					editor.putString(getString(R.string.last_user), userName);
 					editor.putString(getString(R.string.last_pass), userPass);
 					editor.commit();
+					login_btn.setClickable(true);
+					login_btn.setAlpha((float) 1);
 					
 					startActivity(intent);
 				}
@@ -91,6 +92,7 @@ public class Login extends Activity {
 				public void run(){
 					//set error message
 					login_btn.setClickable(true);
+					login_btn.setAlpha((float) 1);
 					loading_animation.setVisibility(4);
 					loading_text.setVisibility(4);
 				}
