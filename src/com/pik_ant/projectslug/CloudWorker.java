@@ -84,6 +84,7 @@ public class CloudWorker {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		// Else
 		cb.GetUsersRecieved(retUsers);
 	}
 	
@@ -108,7 +109,6 @@ public class CloudWorker {
 			line = line.trim();
 			int errornum = Integer.parseInt(line);
 			cb.UpdatePositionRecieved(errornum);
-			return;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -141,7 +141,6 @@ public class CloudWorker {
 			line = line.trim();
 			int errornum = Integer.parseInt(line);
 			cb.RegisterUserRecieved(errornum);
-			return;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -191,7 +190,7 @@ public class CloudWorker {
 			e.printStackTrace();
 		}
 		// Else
-		cb.VerifyUserRecieved(CloudCallback.IsUserResult.Registered);
+		cb.VerifyUserRecieved(CloudCallback.IsUserResult.NotRegistered);
 	}
 	
 	public static void UserRadiusSearchWork(CloudCallback cb, User usr, double radius) {
@@ -233,6 +232,7 @@ public class CloudWorker {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		// Else
 		cb.RadiusSearchRecieved(retUsers);
 	}
 }
