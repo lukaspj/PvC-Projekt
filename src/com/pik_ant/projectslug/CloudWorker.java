@@ -190,7 +190,7 @@ public class CloudWorker {
 			e.printStackTrace();
 		}
 		// Else
-		cb.VerifyUserRecieved(CloudCallback.IsUserResult.Registered);
+		cb.VerifyUserRecieved(CloudCallback.IsUserResult.NotRegistered);
 	}
 	
 	public static void UserRadiusSearchWork(CloudCallback cb, User usr, double radius) {
