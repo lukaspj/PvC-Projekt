@@ -7,7 +7,6 @@ import android.view.Menu;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.pik_ant.projectslug.R;
 
 /**
  * @author baljenurface
@@ -18,8 +17,6 @@ public class Map extends Activity{
 
 	private LocationManager locationManager;
 	private GoogleMap gMap;
-	private Location curLocation;
-	private boolean updateMap = true;
 	//Use a shared preference with key last_user instead
 	private MapModifier modifier;
 	@Override
@@ -48,7 +45,7 @@ public class Map extends Activity{
 	@Override
 	protected void onResume(){
 		super.onResume();
-		modifier.updateMarkers();
+		//modifier.updateMarkers();
 	}
 	
 	

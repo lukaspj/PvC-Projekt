@@ -3,14 +3,17 @@ package com.pik_ant.projectslug;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
+import android.content.SharedPreferences;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -30,16 +33,19 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapModifier implements LocationListener{
 
+	private boolean target = false;
 	private boolean updateMap = true;
 	private Location curLocation = new Location(LocationManager.GPS_PROVIDER);
 	private GoogleMap gMap;
 	private LocationManager manager;
-	private Context context;
-	private static Marker marker;
+	private Activity context;
+	private Marker marker;
 	private Handler handler = new Handler(Looper.getMainLooper());
-	private final ArrayList<Marker> markers = new ArrayList<Marker>();
+	private ArrayList<Marker> markers = new ArrayList<Marker>();
+	private SharedPreferences sharedPrefs;
+	private boolean locationUpdated;
 
-	public MapModifier(GoogleMap map, LocationManager manager, Context context, final FragmentManager fManager){
+	public MapModifier(GoogleMap map, LocationManager manager, Activity context, final FragmentManager fManager){
 		this.gMap = map;
 		this.manager = manager;
 		this.context = context;
@@ -54,6 +60,8 @@ public class MapModifier implements LocationListener{
 				return false;
 			}
 		});
+		sharedPrefs = context.getPreferences(Context.MODE_PRIVATE);
+		
 	}
 
 	public static LatLng getLatLng(Location l){
@@ -144,13 +152,13 @@ public class MapModifier implements LocationListener{
 			builder.create().show();
 		}
 	}
-	public static class TargetDialogFragment extends DialogFragment {
-		private static boolean target = false;
+	@SuppressLint("ValidFragment")
+	public class TargetDialogFragment extends DialogFragment {
 		@Override
 		public Dialog onCreateDialog(Bundle b){
 			final boolean hasTarget = target;
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			builder.setMessage("Want to set " + marker.getTitle() + " as target?");
+			builder.setMessage(context.getString(R.string.confirm_target, marker.getTitle()));
 			builder.setPositiveButton("yes", new OnClickListener() {
 
 				@Override
@@ -161,7 +169,7 @@ public class MapModifier implements LocationListener{
 						target = true;
 					}
 					else{
-						Toast.makeText(getActivity(), "you all ready have a target",Toast.LENGTH_SHORT).show();
+						Toast.makeText(getActivity(), context.getString(R.string.error_target_exists), Toast.LENGTH_SHORT).show();
 					}
 				}
 			});
@@ -176,13 +184,11 @@ public class MapModifier implements LocationListener{
 			
 		}
 		
-		public static void hasTarget(boolean b){
-			 target = b;
-		}
+
 	}
 	
 	public void hasTarget(boolean b){
-		TargetDialogFragment.hasTarget(b);
+		target = b;
 	}
 
 
@@ -194,7 +200,19 @@ public class MapModifier implements LocationListener{
 			gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(getLatLng(curLocation), 13));
 			updateMap = false;
 		}
-		//CloudInterface.updatePosition(userName, location.getLatitude(), location.getLongitude());
+		String userName=sharedPrefs.getString(context.getString(R.string.last_user), "");
+		User u = new User(userName, location, 0);
+
+		CloudInterface.updatePosition(u, new CloudCallback(){
+			public void UpdatePositionRecieved(int errornum) {
+				if(errornum == 0){
+					locationUpdated = true;
+				}
+				else{
+					locationUpdated = false;
+				}
+			};
+		});
 	}
 
 	@Override

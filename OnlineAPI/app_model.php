@@ -71,20 +71,6 @@ class App_model extends CI_Model {
 					($lat - $radius)+", ' ', "+($long + $radius)+", ',',"+
 					($lat - $radius)+", ' ', "+($long - $radius)+", ')";
 		return $CI->db->query("SELECT name, X(position) AS x, Y(position) AS y FROM nn_users WHERE Intersects( position, GeomFromText(CONCAT('POLYGON($bbox)')) ) AND SQRT(POW( ABS( X(position) - $lat), 2) + POW( ABS( Y(position) - $long), 2)) < $radius");
-	
-		/*SET @center = GeomFromText('POINT(10 10)'); 
-SET @radius = 30; 
-SET @bbox = CONCAT('POLYGON((', 
-X(@center) - @radius, ' ', Y(@center) - @radius, ',', 
-X(@center) + @radius, ' ', Y(@center) - @radius, ',', 
-X(@center) + @radius, ' ', Y(@center) + @radius, ',', 
-X(@center) - @radius, ' ', Y(@center) + @radius, ',', 
-X(@center) - @radius, ' ', Y(@center) - @radius, '))' 
-); 
-SELECT name, AsText(location) 
-FROM Points 
-WHERE Intersects( location, GeomFromText(@bbox) ) 
-AND SQRT(POW( ABS( X(location) - X(@center)), 2) + POW( ABS(Y(location) - Y(@center)), 2 )) < @radius; To Obtain a result ordered by distance from the center of the selection area: */
 	}
 	
 	

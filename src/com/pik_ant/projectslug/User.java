@@ -8,6 +8,8 @@ import java.security.spec.*;
 import javax.crypto.*;
 import javax.crypto.spec.*;
 
+import android.location.Location;
+
 public class User {
 	public String Username;
 	public double lat;
@@ -15,6 +17,16 @@ public class User {
 	public int BluetoothID;
 	private String password;
 	private byte[] enc_password;
+	
+	public User(String userName, Location l, int bid){
+		Username = userName;
+		this.lat = l.getLatitude();
+		this.lng = l.getLongitude();
+		BluetoothID = bid;
+	}
+	public User(){
+		
+	}
 	public byte[] getEncPassword() { return enc_password; };
 	public void setPassword(String pass){
 		password = pass;
