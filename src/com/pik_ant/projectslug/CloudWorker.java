@@ -74,7 +74,7 @@ public class CloudWorker {
 				usr.Username = fields[0];
 				usr.lng = Double.parseDouble(fields[1]);
 				usr.lat = Double.parseDouble(fields[2]);
-				usr.BluetoothID = Integer.parseInt(fields[3]);
+				usr.BluetoothID = fields[3];
 				retUsers.add(usr);
 			}
 		} catch (MalformedURLException e) {
@@ -222,7 +222,7 @@ public class CloudWorker {
 				_usr.Username = fields[0];
 				_usr.lng = Double.parseDouble(fields[1]);
 				_usr.lat = Double.parseDouble(fields[2]);
-				_usr.BluetoothID = Integer.parseInt(fields[3]);
+				_usr.BluetoothID = fields[3];
 				retUsers.add(usr);
 			}
 		} catch (MalformedURLException e) {

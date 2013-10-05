@@ -11,17 +11,14 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 import android.widget.Toast;
 
-public class BluetoothService extends IntentService {
+public class BluetoothService extends Service {
+
+
 	private BluetoothAdapter adapter;
 	private final Context c = this;
 	
-	public BluetoothService(String name) {
-		super(name);
-	}
-	
 	@Override
-	public void onHandleIntent(Intent intent) 
-	{
+	public int onStartCommand(Intent intent, int flags, int startid){
 	    Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
 		adapter = (BluetoothAdapter) getSystemService(BLUETOOTH_SERVICE);
 		adapter.startDiscovery();
@@ -32,6 +29,7 @@ public class BluetoothService extends IntentService {
 	    registerReceiver(mReceiver, filter2);
 	    registerReceiver(mReceiver, filter3);
 	    registerReceiver(mReceiver, filter4);
+	    return START_STICKY;
 	}
 
 	//The BroadcastReceiver that listens for bluetooth broadcasts
@@ -63,5 +61,10 @@ public class BluetoothService extends IntentService {
 		adapter.cancelDiscovery();
 	    this.unregisterReceiver(mReceiver);
 	    Toast.makeText(this, "BlueDetect Stopped", Toast.LENGTH_LONG).show();
+	}
+	@Override
+	public IBinder onBind(Intent intent) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
