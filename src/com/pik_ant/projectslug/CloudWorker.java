@@ -33,7 +33,9 @@ public class CloudWorker {
  
 			// The Cloud API will always return a single line result
 			String inputLine = br.readLine();
-			line = line.trim().replaceAll("\\p{C}", "");
+
+			inputLine = inputLine.trim().replaceAll("\\p{C}", "");
+
 			// Interpret the result
 			if(inputLine.contains("-1"))
 				cb.IsUserRecieved(CloudCallback.IsUserResult.MultipleRegistered);
@@ -180,7 +182,9 @@ public class CloudWorker {
  
 			// The Cloud API will always return a single line result
 			String inputLine = br.readLine();
-			line = line.trim().replaceAll("\\p{C}", "");
+
+			inputLine = inputLine.trim().replaceAll("\\p{C}", "");
+
 			// Interpret the result
 			if(inputLine.contains("-1"))
 				cb.VerifyUserRecieved(CloudCallback.IsUserResult.MultipleRegistered);

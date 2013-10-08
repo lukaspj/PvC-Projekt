@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.Toast;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * @author baljenurface
@@ -82,7 +83,6 @@ public class Map extends Activity{
 	@Override
 	protected void onResume(){
 		super.onResume();
-		modifier.updateMarkers();
 	}
 	
 	
@@ -104,11 +104,15 @@ public class Map extends Activity{
 	};
 	//we use degrees as range so 0.01 degrees is around 
 	public void findNewTarget(View v){
-		CloudInterface.radiusSearch(new User("", modifier.getCurLocation(),""), 0.01, new CloudCallback(){
+		User u = new User();
+		LatLng ln = modifier.userMarkersMap.get("tubidibidu").getPosition();
+		u.lat = ln.latitude;
+		u.lng = ln.longitude;
+		CloudInterface.radiusSearch(u, 0.3, new CloudCallback(){
 			public void RadiusSearchRecieved(List<User> lis){
 				if(!lis.isEmpty()){
 					int i = new Random().nextInt(lis.size()-1);
-					modifier.setTargetIcon(lis.get(i).BluetoothID);
+					modifier.setTargetIcon(lis.get(i).Username);
 					bluetoothTarget = lis.get(i).BluetoothID;
 				}
 			}

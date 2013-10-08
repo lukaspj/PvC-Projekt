@@ -2,16 +2,11 @@ package com.pik_ant.projectslug;
 
 import java.util.HashMap;
 import java.util.List;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import android.content.SharedPreferences;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
@@ -20,7 +15,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
-import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
@@ -31,19 +25,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapModifier implements LocationListener{
 
-	private boolean target = false;
 	private boolean updateMap = true;
 	private Location curLocation = new Location(LocationManager.GPS_PROVIDER);
 	private GoogleMap gMap;
 	private LocationManager manager;
 	private Activity context;
-	private Marker clickedMarker;
 	private Handler handler = new Handler(Looper.getMainLooper());
-	private HashMap<String, Marker> bidMarkersMap = new HashMap<String, Marker>();
-	private SharedPreferences sharedPrefs;
-	private boolean locationUpdated;
+	public HashMap<String, Marker> userMarkersMap = new HashMap<String, Marker>();
 	private Marker targetMarker;
-
+	private String username = Login.user_name;
 	public MapModifier(GoogleMap map, LocationManager manager, Activity context, final FragmentManager fManager){
 		this.gMap = map;
 		this.manager = manager;
@@ -52,13 +42,11 @@ public class MapModifier implements LocationListener{
 
 			@Override
 			public boolean onMarkerClick(Marker marker) {
-				clickedMarker = marker;
-				TargetDialogFragment target = new TargetDialogFragment();
-				target.show(fManager, "target dialog");
+				marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.crosshair));
 				return false;
 			}
 		});
-		sharedPrefs = context.getPreferences(Context.MODE_PRIVATE);
+		context.getPreferences(Context.MODE_PRIVATE);
 		
 	}
 
@@ -72,15 +60,16 @@ public class MapModifier implements LocationListener{
 			public void GetUsersRecieved(List<User> lis){
 				if(!lis.isEmpty()){
 					for(User u : lis){
-						if(!(curLocation.getLatitude()==u.lat && curLocation.getLongitude()==u.lng)){
+						if(!(u.Username.equals(username))){
 							final User u2 = u;
 							handler.post(new Runnable() {
 
 								@Override
 								public void run() {
-									bidMarkersMap.put(u2.BluetoothID, map.addMarker(new MarkerOptions()
+									Marker m = map.addMarker(new MarkerOptions()
 									.position(new LatLng(u2.lat, u2.lng))
-									.title(u2.Username)));
+									.title(u2.Username));
+									userMarkersMap.put(u2.Username, m );
 								}
 							});
 
@@ -98,23 +87,24 @@ public class MapModifier implements LocationListener{
 				if(!lis.isEmpty()){
 					for(int i = 0; i<lis.size(); i++){
 						final User u = lis.get(i);
-						if(bidMarkersMap.get(u.BluetoothID) != null){
+						if(userMarkersMap.get(u.Username) != null){
 							handler.post(new Runnable() {
 								
 								@Override
 								public void run() {
-									bidMarkersMap.get(u.BluetoothID).setPosition(new LatLng(u.lat, u.lng));
+									userMarkersMap.get(u.Username).setPosition(new LatLng(u.lat, u.lng));
 								}
 							});
 						}
-						else{
+						else if(!(u.Username.equals(username))){
 							handler.post(new Runnable() {
 
 								@Override
 								public void run() {
-									bidMarkersMap.put(u.BluetoothID, map.addMarker(new MarkerOptions()
+									Marker m = map.addMarker(new MarkerOptions()
 									.position(new LatLng(u.lat, u.lng))
-									.title(u.Username)));
+									.title(u.Username));
+									userMarkersMap.put(u.Username, m);
 								}
 							});
 						}
@@ -152,42 +142,6 @@ public class MapModifier implements LocationListener{
 			builder.create().show();
 		}
 	}
-	@SuppressLint("ValidFragment")
-	public class TargetDialogFragment extends DialogFragment {
-		@Override
-		public Dialog onCreateDialog(Bundle b){
-			final boolean hasTarget = target;
-			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			builder.setMessage(context.getString(R.string.confirm_target, clickedMarker.getTitle()));
-			builder.setPositiveButton("yes", new OnClickListener() {
-
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					if(!hasTarget){
-						clickedMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.crosshair));
-						target = true;
-					}
-					else{
-						Toast.makeText(getActivity(), context.getString(R.string.error_target_exists), Toast.LENGTH_SHORT).show();
-					}
-				}
-			});
-			builder.setNegativeButton("no", new OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-				}
-			});
-			return builder.create();
-			
-		}
-		
-
-	}
-	
-	public void hasTarget(boolean b){
-		target = b;
-	}
 
 
 	@Override
@@ -197,16 +151,13 @@ public class MapModifier implements LocationListener{
 			gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(getLatLng(curLocation), 13));
 			updateMap = false;
 		}
-		String userName=sharedPrefs.getString(context.getString(R.string.last_user), "");
-		User u = new User(userName, location, "");
+		User u = new User(username, location, "");
 
 		CloudInterface.updatePosition(u, new CloudCallback(){
 			public void UpdatePositionRecieved(int errornum) {
 				if(errornum == 0){
-					locationUpdated = true;
 				}
 				else{
-					locationUpdated = false;
 				}
 			};
 		});
@@ -214,8 +165,8 @@ public class MapModifier implements LocationListener{
 	}
 
 	
-	public void setTargetIcon(String bid){
-		final Marker m = bidMarkersMap.get(bid);
+	public void setTargetIcon(String username){
+		final Marker m = userMarkersMap.get(username);
 		handler.post(new Runnable() {
 			
 			@Override
