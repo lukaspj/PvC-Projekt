@@ -229,7 +229,7 @@ if(!function_exists('resp_app_user_register'))
 		$lat = $obj->input->post('lat');
 		$long = $obj->input->post('long');
 		$id = $obj->input->post('id');
-		$pass = $obj->input->post('pass');
+		$pass = $obj->input->post('password');
 		return $obj->app_model->registerUser($user, $lat, $long, $id, $pass);
 	}
 }
@@ -342,6 +342,132 @@ if(!function_exists('jon_app_get_other_users'))
 		}
 		
 		return json_encode($alluserarray);
+	}
+}
+
+if(!function_exists('jon_app_delete_notification'))
+{
+	function jon_app_delete_notification($obj, $data)
+	{
+		$obj->load->model('app_model');
+		$deviceid = $obj->input->post('deviceid');
+		$realid = $obj->input->post('realid');
+		return $obj->app_model->jon_deleteNotification($deviceid, $realid);
+	}
+}
+
+if(!function_exists('jon_app_delete_association'))
+{
+	function jon_app_delete_association($obj, $data)
+	{
+		$obj->load->model('app_model');
+		$deviceid = $obj->input->post('deviceid');
+		$realid = $obj->input->post('realid');
+		return $obj->app_model->jon_deleteAssociation($deviceid, $realid);
+	}
+}
+
+if(!function_exists('jon_app_get_notifications'))
+{
+	function jon_app_get_notifications($obj, $data)
+	{
+		$obj->load->model('app_model');
+		$mydeviceid = $obj->input->post('mydeviceid');
+		$result = $obj->app_model->jon_getNotifications($mydeviceid);
+		
+		$allnotificationarray = array();
+		$count = 0;
+		
+		foreach($result->result() as $row){
+			$singlenotificationarray[0] = $row->realid;
+			$singlenotificationarray[1] = $row->message;
+			
+			$allnotificationarray[$count] = $singlenotificationarray;	
+			$count = $count+1;
+		}
+		
+		return json_encode($allnotificationarray);
+	}
+}
+
+if(!function_exists('jon_app_create_notification'))
+{
+	function jon_app_create_notification($obj, $data)
+	{
+		$obj->load->model('app_model');
+		$deviceid = $obj->input->post('deviceid');
+		$realid = $obj->input->post('realid');
+		$message = $obj->input->post('message');
+		return $obj->app_model->jon_createNotification($deviceid, $realid, $message);
+	}
+}
+
+if(!function_exists('jon_app_get_associations'))
+{
+	function jon_app_get_associations($obj, $data)
+	{
+		$obj->load->model('app_model');
+		$mydeviceid = $obj->input->post('mydeviceid');
+		$type = $obj->input->post('type');
+		$result = $obj->app_model->jon_getAssociations($mydeviceid, $type);
+		
+		$allassociationarray = array();
+		$count = 0;
+		
+		foreach($result->result() as $row){
+			$singleassociationarray[0] = $row->realid;
+			$singleassociationarray[1] = $row->nameid;
+			
+			$allassociationarray[$count] = $singleassociationarray;	
+			$count = $count+1;
+		}
+		
+		return json_encode($allassociationarray);
+	}
+}
+
+if(!function_exists('jon_app_create_association'))
+{
+	function jon_app_create_association($obj, $data)
+	{
+		$obj->load->model('app_model');
+		$deviceid = $obj->input->post('deviceid');
+		$realid = $obj->input->post('realid');
+		$nameid = $obj->input->post('nameid');
+		$type = $obj->input->post('type');
+		return $obj->app_model->jon_createAssociation($deviceid, $realid, $nameid, $type);
+	}
+}
+
+if(!function_exists('jon_app_association_exists'))
+{
+	function jon_app_association_exists($obj, $data)
+	{
+		$obj->load->model('app_model');
+		$deviceid = $obj->input->post('deviceid');
+		$real = $obj->input->post('realid');
+		return $obj->app_model->jon_associationexists($deviceid, $realid) ? "1" : "0";
+	}
+}
+
+if(!function_exists('jon_app_notification_exists'))
+{
+	function jon_app_notification_exists($obj, $data)
+	{
+		$obj->load->model('app_model');
+		$deviceid = $obj->input->post('deviceid');
+		$real = $obj->input->post('realid');
+		return $obj->app_model->jon_notificationexists($deviceid, $realid) ? "1" : "0";
+	}
+}
+
+if(!function_exists('jon_app_delete_user'))
+{
+	function jon_app_delete_user($obj, $data)
+	{
+		$obj->load->model('app_model');
+		$deviceid = $obj->input->post('deviceid');
+		return $obj->app_model->jon_deleteUser($deviceid);
 	}
 }
 

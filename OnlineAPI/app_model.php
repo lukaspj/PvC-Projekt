@@ -19,9 +19,9 @@ class App_model extends CI_Model {
 		if($query->num_rows() > 1)
 			return -1;
 		else if($query->num_rows() == 1)
-			return false;
-		else
 			return true;
+		else
+			return false;
 	}
 	
 	public function allAppUsers()
@@ -41,7 +41,7 @@ class App_model extends CI_Model {
 	public function registerUser($username, $lat, $long, $bluetoothID, $password)
 	{
 		$CI =& get_instance();
-		$query = $CI->db->query("INSERT INTO app_users (username, position, bluetoothid, password) VALUES ('$username', GeomFromText('POINT($lat $long)'), $bluetoothID, $password)");
+		$query = $CI->db->query("INSERT INTO app_users (username, position, bluetoothid, password) VALUES ('$username', GeomFromText('POINT($lat $long)'), '$bluetoothID', '$password')");
 		return $CI->db->_error_number();
 	}
 
@@ -71,37 +71,8 @@ class App_model extends CI_Model {
 					($lat - $radius)+", ' ', "+($long + $radius)+", ',',"+
 					($lat - $radius)+", ' ', "+($long - $radius)+", ')";
 		return $CI->db->query("SELECT name, X(position) AS x, Y(position) AS y FROM nn_users WHERE Intersects( position, GeomFromText(CONCAT('POLYGON($bbox)')) ) AND SQRT(POW( ABS( X(position) - $lat), 2) + POW( ABS( Y(position) - $long), 2)) < $radius");
-	
-		/*SET @center = GeomFromText('POINT(10 10)'); 
-SET @radius = 30; 
-SET @bbox = CONCAT('POLYGON((', 
-X(@center) - @radius, ' ', Y(@center) - @radius, ',', 
-X(@center) + @radius, ' ', Y(@center) - @radius, ',', 
-X(@center) + @radius, ' ', Y(@center) + @radius, ',', 
-X(@center) - @radius, ' ', Y(@center) + @radius, ',', 
-X(@center) - @radius, ' ', Y(@center) - @radius, '))' 
-); 
-SELECT name, AsText(location) 
-FROM Points 
-WHERE Intersects( location, GeomFromText(@bbox) ) 
-AND SQRT(POW( ABS( X(location) - X(@center)), 2) + POW( ABS(Y(location) - Y(@center)), 2 )) < @radius; To Obtain a result ordered by distance from the center of the selection area: */
 	}
 	
-	public function verifyPass($username, $password, $updateFlags = true)
-	{
-		log_message("error", "MYSQL ERROR verifyPass: " . $username . "  -  " . $password);
-		$CI =& get_instance();
-		$query = $CI->db->query("SELECT * FROM nn_users WHERE username='$username' AND password='$password'");
-		if($CI->db->_error_number() != 0)
-			log_message("error", "MYSQL ERROR verifyPass: " . $CI->db->_error_message() );
-		if($CI->db->_error_number() == 0){
-			$result = $query->result();
-			$CI->session->set_userdata('flags', $result[0]->flags);
-			return TRUE;
-		}
-		else
-			return FALSE;
-	}
 	
 	/**********************************/
 	/************* JONAS **************/
@@ -146,6 +117,84 @@ AND SQRT(POW( ABS( X(location) - X(@center)), 2) + POW( ABS(Y(location) - Y(@cen
 		$CI =& get_instance();
 		$query = $CI->db->query("SELECT name, X(position) x, Y(position) y, time FROM jon_users WHERE deviceid != '$mydeviceid'");
 		return $query;
+	}
+	
+	public function jon_deleteNotification($deviceid, $realid){
+		$CI =& get_instance();
+		$query = $CI->db->query("DELETE FROM jon_notifications WHERE deviceid = '$deviceid' AND realid = '$realid'");
+		return $CI->db->_error_number();
+	}
+	
+	public function jon_createNotification($deviceid, $realid, $message)
+	{
+		$CI =& get_instance();
+		if($this->jon_notificationexists($deviceid, $realid))
+		{
+			$query = $CI->db->query("UPDATE jon_notifications SET message='$message' WHERE deviceid='$deviceid' AND realid='$realid'");
+			return $CI->db->_error_number();
+		} else {
+			$query = $CI->db->query("INSERT INTO jon_notifications (deviceid, realid, message) VALUES ('$deviceid', '$realid', '$message')");
+			return $CI->db->_error_number();
+		}
+	}
+	
+	public function jon_getNotifications($mydeviceid)
+	{
+		$CI =& get_instance();
+		$query = $CI->db->query("SELECT realid, message FROM jon_notifications WHERE deviceid = '$mydeviceid'");
+		return $query;
+	}
+	
+	public function jon_notificationexists($deviceid, $realid)
+	{
+		$CI =& get_instance();
+		$query = $CI->db->query("SELECT * FROM jon_notifications WHERE deviceid='$deviceid' AND realid='$realid'");
+		if($query->num_rows() > 1)
+			return - 1;
+		else
+			return $query->num_rows() == 1 ? true : false;
+	}
+	
+	public function jon_deleteAssociation($deviceid, $realid){
+		$CI =& get_instance();
+		$query = $CI->db->query("DELETE FROM jon_associations WHERE deviceid = '$deviceid' AND realid = '$realid'");
+		return $CI->db->_error_number();
+	}
+	
+	public function jon_getAssociations($mydeviceid, $type)
+	{
+		$CI =& get_instance();
+		$query = $CI->db->query("SELECT realid, nameid FROM jon_associations WHERE deviceid = '$mydeviceid' AND type = '$type'");
+		return $query;
+	}
+	
+	public function jon_createAssociation($deviceid, $realid, $nameid, $type)
+	{
+		$CI =& get_instance();
+		if($this->jon_associationexists($deviceid, $realid))
+		{
+			$query = $CI->db->query("UPDATE jon_associations SET nameid='$nameid', type='$type' WHERE deviceid='$deviceid' AND realid='$realid'");
+			return $CI->db->_error_number();
+		} else {
+			$query = $CI->db->query("INSERT INTO jon_associations (deviceid, realid, nameid, type) VALUES ('$deviceid', '$realid', '$nameid', '$type')");
+			return $CI->db->_error_number();
+		}
+	}
+	
+	public function jon_associationexists($deviceid, $realid)
+	{
+		$CI =& get_instance();
+		$query = $CI->db->query("SELECT * FROM jon_associations WHERE deviceid='$deviceid' AND realid='$realid'");
+		if($query->num_rows() > 1)
+			return - 1;
+		else
+			return $query->num_rows() == 1 ? true : false;
+	}
+	
+	public function jon_deleteUser($deviceid){
+		$CI =& get_instance();
+		$query = $CI->db->query("DELETE FROM jon_users WHERE deviceid = '$deviceid'");
+		return $CI->db->_error_number();
 	}
 }
 /* END OF FILE */

@@ -109,6 +109,7 @@ public class CloudWorker {
 			line = line.trim();
 			int errornum = Integer.parseInt(line);
 			cb.UpdatePositionRecieved(errornum);
+			return;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -124,11 +125,12 @@ public class CloudWorker {
 		URL url;
 		try{
 			// get URL content
-			url = new URL("http://fuzzyvoidstudio.com/request/get/register_user/");
+			url = new URL("http://fuzzyvoidstudio.com/request/get/app_register_user/");
 			URLConnection conn = url.openConnection();
 			conn.setDoOutput(true);
 			
 			OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
+			
 			
 			// Send our POST data
 			writer.write("username="+usr.Username+"&lat="+usr.lat+"&long="+usr.lng+"&id="+usr.BluetoothID+"&password="+usr.getEncPassword().toString());
@@ -138,9 +140,10 @@ public class CloudWorker {
 			BufferedReader br = new BufferedReader(
                                new InputStreamReader(conn.getInputStream()));
 			String line = br.readLine();
-			line = line.trim();
+			line = line.trim().replace("\0", "");
 			int errornum = Integer.parseInt(line);
 			cb.RegisterUserRecieved(errornum);
+			return;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -178,9 +181,9 @@ public class CloudWorker {
 			if(inputLine.contains("-1"))
 				cb.VerifyUserRecieved(CloudCallback.IsUserResult.MultipleRegistered);
 			else if(inputLine.contains("1"))
-				cb.VerifyUserRecieved(CloudCallback.IsUserResult.NotRegistered);
-			else
 				cb.VerifyUserRecieved(CloudCallback.IsUserResult.Registered);
+			else
+				cb.VerifyUserRecieved(CloudCallback.IsUserResult.NotRegistered);
 			return;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -190,7 +193,7 @@ public class CloudWorker {
 			e.printStackTrace();
 		}
 		// Else
-		cb.VerifyUserRecieved(CloudCallback.IsUserResult.Registered);
+		cb.VerifyUserRecieved(CloudCallback.IsUserResult.NotRegistered);
 	}
 	
 	public static void UserRadiusSearchWork(CloudCallback cb, User usr, double radius) {
