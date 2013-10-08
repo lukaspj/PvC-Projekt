@@ -231,7 +231,7 @@ public class CloudWorker {
 				_usr.lng = Double.parseDouble(fields[1]);
 				_usr.lat = Double.parseDouble(fields[2]);
 				_usr.BluetoothID = fields[3];
-				retUsers.add(usr);
+				retUsers.add(_usr);
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
