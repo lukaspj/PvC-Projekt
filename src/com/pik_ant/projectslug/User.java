@@ -56,9 +56,6 @@ public class User {
 		catch(NoSuchPaddingException ex){
 			ex.printStackTrace();
 		}
-		/*catch (InvalidParameterSpecException ex) {
-			ex.printStackTrace();
-		}*/
 		catch (UnsupportedEncodingException ex) {
 			ex.printStackTrace();
 		}
