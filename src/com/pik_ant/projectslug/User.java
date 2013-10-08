@@ -31,7 +31,14 @@ public class User {
 	}
 
 
-	public String getEncPassword() { return new String(enc_password); }
+	public String getEncPassword() { 
+		char[] convertedChar = new char[enc_password.length];
+			for(int i=0;i < enc_password.length;i++){
+				convertedChar[i]=(char)enc_password[i];
+		}
+		return new String(convertedChar); 
+	}
+	
 	public void setPassword(String pass){
 		password = pass;
 		try {
