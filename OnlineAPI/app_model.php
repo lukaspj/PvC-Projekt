@@ -34,14 +34,14 @@ class App_model extends CI_Model {
 	public function updatePosition($username, $lat, $long)
 	{
 		$CI =& get_instance();
-		$query = $CI->db->query("UPDATE app_users SET position=GeomFromText('POINT($lat $long)') WHERE username='$username'");
+		$query = $CI->db->query("UPDATE app_users SET position=GeomFromText('POINT($long $lat)') WHERE username='$username'");
 		return $CI->db->_error_number();
 	}
 	
 	public function registerUser($username, $lat, $long, $bluetoothID, $password)
 	{
 		$CI =& get_instance();
-		$query = $CI->db->query("INSERT INTO app_users (username, position, bluetoothid, password) VALUES ('$username', GeomFromText('POINT($lat $long)'), '$bluetoothID', '$password')");
+		$query = $CI->db->query("INSERT INTO app_users (username, position, bluetoothid, password) VALUES ('$username', GeomFromText('POINT($long $lat)'), '$bluetoothID', '$password')");
 		return $CI->db->_error_number();
 	}
 
@@ -64,13 +64,13 @@ class App_model extends CI_Model {
 	public function getUsersInsideCircle($username, $lat, $long, $radius)
 	{
     	$CI =& get_instance();
-		$bbox = "(', "+
-					($lat - $radius)+", ' ', "+($long - $radius)+", ',',"+
-					($lat + $radius)+", ' ', "+($long - $radius)+", ',',"+
-					($lat + $radius)+", ' ', "+($long + $radius)+", ',',"+
-					($lat - $radius)+", ' ', "+($long + $radius)+", ',',"+
-					($lat - $radius)+", ' ', "+($long - $radius)+", ')";
-		return $CI->db->query("SELECT name, X(position) AS x, Y(position) AS y FROM nn_users WHERE Intersects( position, GeomFromText(CONCAT('POLYGON($bbox)')) ) AND SQRT(POW( ABS( X(position) - $lat), 2) + POW( ABS( Y(position) - $long), 2)) < $radius");
+		$bbox = "CONCAT('POLYGON((', ".
+					($long - $radius).", ' ', ".($lat - $radius).", ',',".
+					($long + $radius).", ' ', ".($lat - $radius).", ',',".
+					($long + $radius).", ' ', ".($lat + $radius).", ',',".
+					($long - $radius).", ' ', ".($lat + $radius).", ',',".
+					($long - $radius).", ' ', ".($lat - $radius).", '))')";
+		return $CI->db->query("SELECT username, X(position) AS x, Y(position) AS y, bluetoothid FROM app_users WHERE Intersects( position, GeomFromText($bbox) ) AND SQRT(POW( ABS( X(position) - $long), 2) + POW( ABS( Y(position) - $lat), 2)) < $radius");
 	}
 	
 	
