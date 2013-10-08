@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:text="button"
+        android:text="@string/new_target"
         android:onClick="findNewTarget" />
     
 </RelativeLayout>

@@ -1,6 +1,5 @@
 package com.pik_ant.projectslug;
 
-import android.app.IntentService;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -20,7 +19,7 @@ public class BluetoothService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startid){
 	    Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
-		adapter = (BluetoothAdapter) getSystemService(BLUETOOTH_SERVICE);
+		adapter = BluetoothAdapter.getDefaultAdapter();
 		adapter.startDiscovery();
 	    IntentFilter filter2, filter3, filter4;
 	    filter2 = new IntentFilter(android.bluetooth.BluetoothDevice.ACTION_ACL_DISCONNECTED);
@@ -38,20 +37,13 @@ public class BluetoothService extends Service {
 	    public void onReceive(Context context, Intent intent) {
 	        String action = intent.getAction();
 	        BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-	        Toast.makeText(c, "BT change received !", Toast.LENGTH_LONG).show();
 
 	        if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-	            Toast.makeText(c, device.getName() + " Device found", Toast.LENGTH_LONG).show();
-	        }
-	        else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
-	            Toast.makeText(c, device.getName() + " Device is now connected", Toast.LENGTH_LONG).show();
-	        }
-	        else if (BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED.equals(action)) {
-	            Toast.makeText(c, device.getName() + " Device is about to disconnect", Toast.LENGTH_LONG).show();
-	        }
-	        else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
-	            Toast.makeText(c, device.getName() + " Device has disconnected", Toast.LENGTH_LONG).show();
-	        }           
+	            if(device.getAddress().equals("")){
+	            	
+	            	Toast.makeText(context, "Your target is in range", Toast.LENGTH_LONG).show();
+	            }
+	        }  
 	    }
 	};
 

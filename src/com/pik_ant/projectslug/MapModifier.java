@@ -1,10 +1,7 @@
 package com.pik_ant.projectslug;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -24,11 +21,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -217,6 +212,7 @@ public class MapModifier implements LocationListener{
 		});
 		updateMarkers();
 	}
+
 	
 	public void setTargetIcon(String bid){
 		final Marker m = bidMarkersMap.get(bid);
@@ -235,15 +231,6 @@ public class MapModifier implements LocationListener{
 	public Location getCurLocation(){
 		return curLocation;
 	}
-//	
-//	public void setTarget(){
-//		CloudInterface.radiusSearch(new User("", curLocation, ""), 0.001, new CloudCallback(){
-//			public void RadiusSearchRecieved(List<User> lis){
-//				int i = new Random().nextInt(lis.size()-1);
-//				changeIconOfUser(lis.get(i));	
-//			}
-//		});
-//	}
 
 	@Override
 	public void onProviderDisabled(String provider) {

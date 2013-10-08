@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -17,14 +16,12 @@ import android.location.LocationManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * @author baljenurface
@@ -40,17 +37,19 @@ public class Map extends Activity{
 	private List<BluetoothDevice> devices = new ArrayList<BluetoothDevice>();
 	private HashMap<String, Location> bssidLocationMap = new HashMap<String, Location>();
 	private String bluetoothTarget = null;
+	private Vibrator vibrator;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
-
 		getActionBar().hide();
-
 		MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
 		gMap = mapFragment.getMap();
 		gMap.setMyLocationEnabled(true);
+		vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 		locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+		wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
+		adapter = BluetoothAdapter.getDefaultAdapter();
 		modifier = new MapModifier(gMap, locationManager, this, getFragmentManager());
 		modifier.getLocation();
 		modifier.getLocationMarkers();
@@ -58,8 +57,6 @@ public class Map extends Activity{
 	    IntentFilter filter2 = new IntentFilter(android.bluetooth.BluetoothDevice.ACTION_ACL_CONNECTED);
 	    registerReceiver(mReceiver, filter);
 	    registerReceiver(mReceiver, filter2);
-		adapter = BluetoothAdapter.getDefaultAdapter();
-		wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
 		wifiManager.setWifiEnabled(true);
 		wifiManager.startScan();
 		List<ScanResult> scanResult = wifiManager.getScanResults();
@@ -72,7 +69,7 @@ public class Map extends Activity{
 		    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 		    startActivityForResult(enableBtIntent, 1);
 		}
-		adapter.startDiscovery();	
+		adapter.startDiscovery();
 	}
 
 	@Override
@@ -99,17 +96,15 @@ public class Map extends Activity{
 	        if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 	            devices.add(device);
 	            if(device.getAddress().equals(bluetoothTarget)){
-	            	Toast.makeText(context, "Your target is in range", Toast.LENGTH_LONG);
+	            	vibrator.vibrate(100);
+	            	Toast.makeText(context, "Your target is in range", Toast.LENGTH_LONG).show();
 	            }
-	        }
-	        else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
-	            Toast.makeText(context, device.getName() + " Device is now connected", Toast.LENGTH_LONG).show();
-	        }      
+	        }  
 	    }
 	};
-	//we use degrees as range so 0.001 degrees is arround 
+	//we use degrees as range so 0.01 degrees is around 
 	public void findNewTarget(View v){
-		CloudInterface.radiusSearch(new User("", modifier.getCurLocation(),""), 0.001, new CloudCallback(){
+		CloudInterface.radiusSearch(new User("", modifier.getCurLocation(),""), 0.01, new CloudCallback(){
 			public void RadiusSearchRecieved(List<User> lis){
 				if(!lis.isEmpty()){
 					int i = new Random().nextInt(lis.size()-1);
@@ -118,12 +113,10 @@ public class Map extends Activity{
 				}
 			}
 		});
-//		int i = new Random().nextInt(devices.size()-1);
-//		modifier.setTargetIcon(devices.get(i).getAddress());
-//		bluetoothTarget = devices.get(i).getAddress();
 		
 	}
 	
-
-	
+	public void addDevice(BluetoothDevice d){
+		devices.add(d);
+	}
 }

@@ -25,5 +25,6 @@
     <string name="error_username_taken">The username is not available</string>
     <string name="confirm_target">Want to set %s as target?</string>
     <string name="error_target_exists">You already have a target!</string>
+    <string name="new_target">New Target</string>
 
 </resources>
