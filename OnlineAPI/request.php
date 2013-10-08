@@ -93,19 +93,31 @@ class request extends CI_Controller {
 			case "jon_get_other_users":
 				echo jon_app_get_other_users($this, $data);
 			break;
-			case "jon_app_association_exists":
+			case "jon_association_exists":
 				echo jon_app_association_exists($this, $data);
 			break;
-			case "jon_app_create_association":
+			case "jon_create_association":
 				echo jon_app_create_association($this, $data);
 			break;
-			case "jon_app_get_associations":
+			case "jon_get_associations":
 				echo jon_app_get_associations($this, $data);
 			break;
-			case "jon_app_delete_association":
+			case "jon_delete_association":
 				echo jon_app_delete_association($this, $data);
 			break;
-			case "jon_app_delete_user":
+			case "jon_notification_exists":
+				echo jon_app_notification_exists($this, $data);
+			break;
+			case "jon_create_notification":
+				echo jon_app_create_notification($this, $data);
+			break;
+			case "jon_get_notifications":
+				echo jon_app_get_notifications($this, $data);
+			break;
+			case "jon_delete_notification":
+				echo jon_app_delete_notification($this, $data);
+			break;
+			case "jon_delete_user":
 				echo jon_app_delete_user($this, $data);
 			break;
 		}

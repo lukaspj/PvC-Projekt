@@ -41,7 +41,7 @@ class App_model extends CI_Model {
 	public function registerUser($username, $lat, $long, $bluetoothID, $password)
 	{
 		$CI =& get_instance();
-		$query = $CI->db->query("INSERT INTO app_users (username, position, bluetoothid, password) VALUES ('$username', GeomFromText('POINT($lat $long)'), $bluetoothID, $password)");
+		$query = $CI->db->query("INSERT INTO app_users (username, position, bluetoothid, password) VALUES ('$username', GeomFromText('POINT($lat $long)'), '$bluetoothID', '$password')");
 		return $CI->db->_error_number();
 	}
 
@@ -119,40 +119,76 @@ class App_model extends CI_Model {
 		return $query;
 	}
 	
-	public function jon_associationexists($deviceid, $btid)
+	public function jon_deleteNotification($deviceid, $realid){
+		$CI =& get_instance();
+		$query = $CI->db->query("DELETE FROM jon_notifications WHERE deviceid = '$deviceid' AND realid = '$realid'");
+		return $CI->db->_error_number();
+	}
+	
+	public function jon_createNotification($deviceid, $realid, $message)
 	{
 		$CI =& get_instance();
-		$query = $CI->db->query("SELECT * FROM jon_associations WHERE deviceid='$deviceid' AND btid='$btid'");
+		if($this->jon_notificationexists($deviceid, $realid))
+		{
+			$query = $CI->db->query("UPDATE jon_notifications SET message='$message' WHERE deviceid='$deviceid' AND realid='$realid'");
+			return $CI->db->_error_number();
+		} else {
+			$query = $CI->db->query("INSERT INTO jon_notifications (deviceid, realid, message) VALUES ('$deviceid', '$realid', '$message')");
+			return $CI->db->_error_number();
+		}
+	}
+	
+	public function jon_getNotifications($mydeviceid)
+	{
+		$CI =& get_instance();
+		$query = $CI->db->query("SELECT realid, message FROM jon_notifications WHERE deviceid = '$mydeviceid'");
+		return $query;
+	}
+	
+	public function jon_notificationexists($deviceid, $realid)
+	{
+		$CI =& get_instance();
+		$query = $CI->db->query("SELECT * FROM jon_notifications WHERE deviceid='$deviceid' AND realid='$realid'");
 		if($query->num_rows() > 1)
 			return - 1;
 		else
 			return $query->num_rows() == 1 ? true : false;
 	}
 	
-	public function jon_createAssociation($deviceid, $btid, $contactid)
+	public function jon_deleteAssociation($deviceid, $realid){
+		$CI =& get_instance();
+		$query = $CI->db->query("DELETE FROM jon_associations WHERE deviceid = '$deviceid' AND realid = '$realid'");
+		return $CI->db->_error_number();
+	}
+	
+	public function jon_getAssociations($mydeviceid, $type)
 	{
 		$CI =& get_instance();
-		if($this->jon_associationexists($deviceid, $btid))
+		$query = $CI->db->query("SELECT realid, nameid FROM jon_associations WHERE deviceid = '$mydeviceid' AND type = '$type'");
+		return $query;
+	}
+	
+	public function jon_createAssociation($deviceid, $realid, $nameid, $type)
+	{
+		$CI =& get_instance();
+		if($this->jon_associationexists($deviceid, $realid))
 		{
-			$query = $CI->db->query("UPDATE jon_associations SET contactid='$contactid' WHERE deviceid='$deviceid' AND btid='$btid'");
+			$query = $CI->db->query("UPDATE jon_associations SET nameid='$nameid', type='$type' WHERE deviceid='$deviceid' AND realid='$realid'");
 			return $CI->db->_error_number();
 		} else {
-			$query = $CI->db->query("INSERT INTO jon_associations (deviceid, btid, contactid) VALUES ('$deviceid', '$btid', '$contactid')");
+			$query = $CI->db->query("INSERT INTO jon_associations (deviceid, realid, nameid, type) VALUES ('$deviceid', '$realid', '$nameid', '$type')");
 			return $CI->db->_error_number();
 		}
 	}
 	
-	public function jon_getAssociations($mydeviceid)
+	public function jon_associationexists($deviceid, $realid)
 	{
 		$CI =& get_instance();
-		$query = $CI->db->query("SELECT btid, contactid FROM jon_associations WHERE deviceid = '$mydeviceid'");
-		return $query;
-	}
-	
-	public function jon_deleteAssociation($deviceid, $btid){
-		$CI =& get_instance();
-		$query = $CI->db->query("DELETE FROM jon_associations WHERE deviceid = '$deviceid' AND btid = '$btid'");
-		return $CI->db->_error_number();
+		$query = $CI->db->query("SELECT * FROM jon_associations WHERE deviceid='$deviceid' AND realid='$realid'");
+		if($query->num_rows() > 1)
+			return - 1;
+		else
+			return $query->num_rows() == 1 ? true : false;
 	}
 	
 	public function jon_deleteUser($deviceid){
