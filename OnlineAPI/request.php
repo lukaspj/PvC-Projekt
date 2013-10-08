@@ -18,6 +18,26 @@ class request extends CI_Controller {
 		//$this->load->helper('frontpage');
 		switch($action)
 		{
+			case "upd_pos":
+				$this->load->model('app_model');
+				$this->app_model->updatePosition("fisk", -7.491667, 110.004444);
+				$this->app_model->updatePosition("esbengc", -7.591667, 110.004444);
+				$this->app_model->updatePosition("tubudue", -7.391667, 110.004444);
+				$this->app_model->updatePosition("tubidibidu", -7.491667, 110.104444);
+				$this->app_model->updatePosition("trak", -7.491667, 110.204444);
+			break;
+			case "rs_test":
+				$this->load->model('app_model');
+				$table = $this->app_model->getUsersInsideCircle("", -7.491667, 110.004444, 0.1);
+				foreach($table->result() as $row)
+				{
+					echo $row->username . "|";
+					echo $row->x . "|";
+					echo $row->y . "|";
+					echo $row->bluetoothid;
+					echo "\n";
+				}
+			break;
 			case "login_check":
 				echo resp_login_check($this, $data);
 			break;

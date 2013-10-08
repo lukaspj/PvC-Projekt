@@ -33,7 +33,9 @@ public class CloudWorker {
  
 			// The Cloud API will always return a single line result
 			String inputLine = br.readLine();
-			inputLine = inputLine.trim().replace("\0", "");
+
+			inputLine = inputLine.trim().replaceAll("\\p{C}", "");
+
 			// Interpret the result
 			if(inputLine.contains("-1"))
 				cb.IsUserRecieved(CloudCallback.IsUserResult.MultipleRegistered);
@@ -67,7 +69,7 @@ public class CloudWorker {
 			String line;
 			while((line = br.readLine()) != null)
 			{
-				line = line.trim().replace("\0", "");
+				line = line.trim().replaceAll("\\p{C}", "");
 				line = line.replace('|', '_');
 				String[] fields = line.split("_");
 				if(fields.length != 4)
@@ -108,7 +110,7 @@ public class CloudWorker {
 			BufferedReader br = new BufferedReader(
                                new InputStreamReader(conn.getInputStream()));
 			String line = br.readLine();
-			line = line.trim().replace("\0", "");
+			line = line.trim().replaceAll("\\p{C}", "");
 			line = line.trim();
 			int errornum = Integer.parseInt(line);
 			cb.UpdatePositionRecieved(errornum);
@@ -143,7 +145,7 @@ public class CloudWorker {
 			BufferedReader br = new BufferedReader(
                                new InputStreamReader(conn.getInputStream()));
 			String line = br.readLine();
-			line = line.trim().replace("\0", "");
+			line = line.trim().replaceAll("\\p{C}", "");
 			int errornum = Integer.parseInt(line);
 			cb.RegisterUserRecieved(errornum);
 			return;
@@ -180,7 +182,9 @@ public class CloudWorker {
  
 			// The Cloud API will always return a single line result
 			String inputLine = br.readLine();
-			inputLine = inputLine.trim().replace("\0", "");
+
+			inputLine = inputLine.trim().replaceAll("\\p{C}", "");
+
 			// Interpret the result
 			if(inputLine.contains("-1"))
 				cb.VerifyUserRecieved(CloudCallback.IsUserResult.MultipleRegistered);
@@ -221,7 +225,7 @@ public class CloudWorker {
 			String line;
 			while((line = br.readLine()) != null)
 			{
-				line = line.trim().replace("\0", "");
+				line = line.trim().replaceAll("\\p{C}", "");
 				line = line.replace('|', '_');
 				String[] fields = line.split("_");
 				if(fields.length != 4)
