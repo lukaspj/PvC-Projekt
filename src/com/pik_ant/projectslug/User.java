@@ -1,9 +1,7 @@
 package com.pik_ant.projectslug;
 
 import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.*;
+import java.security.*;
 
 import javax.crypto.*;
 import javax.crypto.spec.*;
@@ -41,6 +39,12 @@ public class User {
 	
 	public void setPassword(String pass){
 		password = pass;
+		byte[] bytesOfMessage = pass.getBytes("UTF-8");
+
+		MessageDigest md = MessageDigest.getInstance("MD5");
+		byte[] thedigest = md.digest(bytesOfMessage);
+		enc_password = thedigest;
+		/*
 		try {
 			SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 			KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 100, 128);
@@ -74,6 +78,6 @@ public class User {
 		}
 		catch(NoSuchAlgorithmException ex) {
 			ex.printStackTrace();
-		}
+		}*/
 	}
 }
