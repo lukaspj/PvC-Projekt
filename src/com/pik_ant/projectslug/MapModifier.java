@@ -1,8 +1,7 @@
 package com.pik_ant.projectslug;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,7 +21,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
@@ -39,11 +37,12 @@ public class MapModifier implements LocationListener{
 	private GoogleMap gMap;
 	private LocationManager manager;
 	private Activity context;
-	private Marker marker;
+	private Marker clickedMarker;
 	private Handler handler = new Handler(Looper.getMainLooper());
-	private ArrayList<Marker> markers = new ArrayList<Marker>();
+	private HashMap<String, Marker> bidMarkersMap = new HashMap<String, Marker>();
 	private SharedPreferences sharedPrefs;
 	private boolean locationUpdated;
+	private Marker targetMarker;
 
 	public MapModifier(GoogleMap map, LocationManager manager, Activity context, final FragmentManager fManager){
 		this.gMap = map;
@@ -52,9 +51,8 @@ public class MapModifier implements LocationListener{
 		gMap.setOnMarkerClickListener(new OnMarkerClickListener() {
 
 			@Override
-			public boolean onMarkerClick(Marker _marker) {
-				// TODO Auto-generated method stub
-				marker = _marker;
+			public boolean onMarkerClick(Marker marker) {
+				clickedMarker = marker;
 				TargetDialogFragment target = new TargetDialogFragment();
 				target.show(fManager, "target dialog");
 				return false;
@@ -80,8 +78,7 @@ public class MapModifier implements LocationListener{
 
 								@Override
 								public void run() {
-									// TODO Auto-generated method stub
-									markers.add(map.addMarker(new MarkerOptions()
+									bidMarkersMap.put(u2.BluetoothID, map.addMarker(new MarkerOptions()
 									.position(new LatLng(u2.lat, u2.lng))
 									.title(u2.Username)));
 								}
@@ -98,21 +95,24 @@ public class MapModifier implements LocationListener{
 		final GoogleMap map = gMap;
 		CloudInterface.getUsers(new CloudCallback(){
 			public void GetUsersRecieved(List<User> lis){
-				ArrayList<Marker> _markers = markers;
 				if(!lis.isEmpty()){
 					for(int i = 0; i<lis.size(); i++){
 						final User u = lis.get(i);
-						if(!markers.isEmpty()){
-							markers.get(i).setPosition(new LatLng(u.lat, u.lng));
-							_markers.remove(i);
+						if(bidMarkersMap.get(u.BluetoothID) != null){
+							handler.post(new Runnable() {
+								
+								@Override
+								public void run() {
+									bidMarkersMap.get(u.BluetoothID).setPosition(new LatLng(u.lat, u.lng));
+								}
+							});
 						}
 						else{
 							handler.post(new Runnable() {
 
 								@Override
 								public void run() {
-									// TODO Auto-generated method stub
-									markers.add(map.addMarker(new MarkerOptions()
+									bidMarkersMap.put(u.BluetoothID, map.addMarker(new MarkerOptions()
 									.position(new LatLng(u.lat, u.lng))
 									.title(u.Username)));
 								}
@@ -158,14 +158,13 @@ public class MapModifier implements LocationListener{
 		public Dialog onCreateDialog(Bundle b){
 			final boolean hasTarget = target;
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			builder.setMessage(context.getString(R.string.confirm_target, marker.getTitle()));
+			builder.setMessage(context.getString(R.string.confirm_target, clickedMarker.getTitle()));
 			builder.setPositiveButton("yes", new OnClickListener() {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
 					if(!hasTarget){
-						marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.slug_launcher));
+						clickedMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.crosshair));
 						target = true;
 					}
 					else{
@@ -177,7 +176,6 @@ public class MapModifier implements LocationListener{
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
 				}
 			});
 			return builder.create();
@@ -194,7 +192,6 @@ public class MapModifier implements LocationListener{
 
 	@Override
 	public void onLocationChanged(Location location) {
-		// TODO Auto-generated method stub
 		curLocation = location;
 		if (updateMap) {
 			gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(getLatLng(curLocation), 13));
@@ -213,23 +210,41 @@ public class MapModifier implements LocationListener{
 				}
 			};
 		});
+		updateMarkers();
+	}
+
+	
+	public void setTargetIcon(String bid){
+		final Marker m = bidMarkersMap.get(bid);
+		handler.post(new Runnable() {
+			
+			@Override
+			public void run() {
+				//	TODO Auto-generated method stub
+				m.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.crosshair));
+				targetMarker.setIcon(BitmapDescriptorFactory.defaultMarker());
+				targetMarker = m;
+			}
+		});
+	}
+	
+	public Location getCurLocation(){
+		return curLocation;
 	}
 
 	@Override
 	public void onProviderDisabled(String provider) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-		// TODO Auto-generated method stub
 
 	}
+	
 }

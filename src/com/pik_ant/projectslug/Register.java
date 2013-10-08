@@ -1,6 +1,5 @@
 package com.pik_ant.projectslug;
 
-
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
