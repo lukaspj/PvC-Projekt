@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -60,6 +61,7 @@ public class Login extends Activity {
 		//Loading animation
 		final ProgressBar loading_animation = (ProgressBar) findViewById(R.id.load_anim);
 		final TextView loading_text = (TextView) findViewById(R.id.load_text);
+		final TextView login_error = (TextView) findViewById(R.id.login_error);
 		loading_animation.setVisibility(0);
 		loading_text.setVisibility(0);
 		
@@ -95,6 +97,9 @@ public class Login extends Activity {
 					login_btn.setAlpha((float) 1);
 					loading_animation.setVisibility(4);
 					loading_text.setVisibility(4);
+					login_error.setText("An error ocurred; maybe you didn't write the right user name or password fuckhead!");
+					login_error.setTextColor(Color.RED);
+					login_error.setVisibility(0);
 				}
 			};
 			@Override

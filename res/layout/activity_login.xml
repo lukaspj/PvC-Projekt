@@ -52,5 +52,13 @@
         	android:text="@string/loading"
         	android:layout_gravity="center"
         	android:visibility="invisible"/>
+    
+        <TextView
+        	android:id="@+id/login_error"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:text="@string/loading"
+        	android:layout_gravity="center"
+        	android:visibility="invisible"/>
 
 </LinearLayout>
