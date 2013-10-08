@@ -18,6 +18,7 @@ public class Login extends Activity {
 	private SharedPreferences sharedPref;
 	private EditText inputUser;
 	private EditText inputPass;
+	public static String user_name;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +83,7 @@ public class Login extends Activity {
 					editor.putString(getString(R.string.last_user), userName);
 					editor.putString(getString(R.string.last_pass), userPass);
 					editor.commit();
+					user_name = userName;
 					login_btn.setClickable(true);
 					login_btn.setAlpha((float) 1);
 					
